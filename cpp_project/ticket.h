@@ -32,7 +32,7 @@ private:
 		number++;
 	}
 
-	//Copy constructor 
+	//copy constructor 
 	Ticket(const Ticket& ticket) {
 		this->number = ticket.number;
 		this->isValid = ticket.isValid;
@@ -47,7 +47,7 @@ private:
 		}
 	}
 
-	//Destructor
+	//destructor
 	~Ticket()
 	{
 		if (this->id != nullptr)
@@ -56,7 +56,7 @@ private:
 		}
 	}
 
-	//Getters
+	//getters
 	int getNumber()
 	{
 		return this->number;
@@ -74,7 +74,7 @@ private:
 		return this->isValid;
 	}
 
-	//Setters
+	//setters
 	void setNumber(int number)
 	{
 		this->number = number;
@@ -108,7 +108,7 @@ private:
 
 
 	// << operator
-	friend ostream& operator<<(ostream& out, const Ticket& ticket) 
+	friend ostream& operator<<(ostream& out, const Ticket& ticket)
 	{
 		out << "id: " << ticket.id << ", valid: " << (ticket.isValid ? "yes" : "no");
 		return out;
@@ -120,5 +120,5 @@ private:
 
 int main()
 {
-	std::cout << "Ticket :";
+	cout << "Ticket:";
 }
