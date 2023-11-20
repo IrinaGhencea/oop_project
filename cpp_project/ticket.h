@@ -4,27 +4,46 @@
 
 using namespace std;
 
+enum eventType { THEATER, CONCERT, SPORT };
+
 class Ticket {
 private:
 	string personName="";
 	string company = "";
 	char* id=nullptr;
-	bool isSoldOut;
-	int number=0;
+	bool isSoldOut=false;
+	int* number=nullptr;
+    int totalNumber = 0;
 public:
 
+	friend istream& operator>>(istream& console, Ticket& ticket);
+	friend ostream& operator<<(ostream& console, const Ticket& ticket);
+
 	//default constructor
-	Ticket() {
-		this->number = 0;
-		this->isSoldOut = false;
+	Ticket():isSoldOut(false) {
+		this->number = nullptr;
 		this->id = nullptr;
 		this->personName = "";
 		this->company = "";
+		this->totalNumber = 0;
 	}
 	//1st constructor with parameters
-	Ticket(int number, char* id)
+	Ticket(int* number, int totalNumber, char* id)
 	{
-		this->number = number;
+		this->totalNumber = totalNumber;
+		if (number != nullptr)
+		{
+			this->number = new int[totalNumber];
+			for (int i = 0; i < totalNumber; i++)
+			{
+				this->number[i] = number[i];
+			}
+		}
+		else
+		{
+			this->number = nullptr;
+		}
+
 		if (id != nullptr) {
 			this->id = new char[strlen(id) + 1];
 			strcpy(this->id, id);
@@ -46,20 +65,41 @@ public:
 	}
 
 
+	//proccesing the event
+
+	void event() {
+		switch (eventType) {
+		case THEATER: cout << "You are buying a ticket for a theater play" << endl;
+			break;
+		case CONCERT: cout << "You are buying a ticket for a concert" << endl;
+			break;
+		case SPORT: cout << "You are buying a ticket for a sport match" << endl;
+			break;
+		}
+	
 
 
-
+	}
 
 
 
 
 	//copy constructor 
 	Ticket(const Ticket& ticket) {
-		this->number = ticket.number;
 		this->isSoldOut = ticket.isSoldOut;
 		this->personName = ticket.personName;
 		this->company = ticket.company;
+		this->totalNumber = ticket.totalNumber;
 		
+		if (ticket.number != nullptr)
+		{
+			this->number = new int[this->totalNumber];
+			for (int i = 0; i < this->totalNumber; i++)
+			{
+				this->number[i] = ticket.number[i];
+			}
+		}
+
 		if (ticket.id != nullptr)
 		{
 			this->id = new char[strlen(ticket.id) + 1];
@@ -74,6 +114,11 @@ public:
 	//destructor
 	~Ticket()
 	{
+		if (this->number != nullptr)
+		{
+			delete[] this->number;
+		}
+
 		if (this->id != nullptr)
 		{
 			delete[] this->id;
@@ -81,9 +126,23 @@ public:
 	}
 
 	//getters
-	int getNumber()
+	int* getNumber()
 	{
-		return this->number;
+		int* copy;
+		if (this->number != nullptr)
+		{
+			copy = new int[this->totalNumber];
+			for (int i = 0; i < this->totalNumber; i++)
+			{
+				copy[i] = this->number[i];
+			}
+		}
+		else
+		{
+			copy = nullptr;
+		}
+
+		return copy;
 	}
 
 	char* getId()
@@ -93,11 +152,14 @@ public:
 		return copy;
 	}
 
-	int getValidation()
+	bool getValidation()
 	{
 		return this->isSoldOut;
 	}
-
+	int gettotalNumber()
+	{
+		return this->totalNumber;
+	}
 
 	string getPersonName() {
 		return this->personName;
@@ -107,9 +169,25 @@ public:
 		return this->company;
 	}
 	//setters
-	void setNumber(int number)
+	void setNumber(int* number)
 	{
-		this->number = number;
+		if (this->number != nullptr)
+		{
+			delete[] this->number;
+		}
+
+		if (number != nullptr)
+		{
+			this->number = new int[this->totalNumber];
+			for (int i = 0; i < this->totalNumber; i++)
+			{
+				this->number[i] = number[i];
+			}
+		}
+		else
+		{
+			this->number = nullptr;
+		}
 	}
 
 	void setId(const char* id)
@@ -132,6 +210,11 @@ public:
 		this->personName = personName;
 	}
 
+	void setTotalNumber(int totalNumber)
+	{
+		this->totalNumber = totalNumber;
+	}
+
 
 	void setCompany(string company)
 	{
@@ -147,6 +230,20 @@ public:
 			this->number = ticket.number;
 			this->personName = ticket.personName;
 			this->company = ticket.company;
+			this->totalNumber = ticket.totalNumber;
+			if (ticket.number != nullptr)
+			{
+				this->number = new int[ticket.totalNumber];
+				for (int i = 0; i < this->totalNumber; i++)
+				{
+					this->number[i] = ticket.number[i];
+				}
+			}
+			else
+			{
+				this->number = nullptr;
+			}
+
 			if (this->id!= nullptr) {
 				delete[] this->id;
 			}
@@ -160,6 +257,41 @@ public:
 		}
 		return *this;
 	}
+
+
+	int operator[](int index)
+	{
+		if (number != 0 && index >= 0 && index < totalNumber)
+		{
+			return number[index];
+		}
+	}
+
+	string operator()( int totalnumber, int capacity)
+	{
+		if (this->totalNumber == totalNumber)
+		{
+			if (this->totalNumber > capacity)
+			{
+				return "Exceeds capacity";
+			}
+			else
+			{
+				return "There are still tickets";
+			}
+			
+		}
+		
+	}
+
+
+	//+ operator
+	friend Ticket operator+(Ticket t1, Ticket t2)
+	{
+		t1.totalNumber += t2.totalNumber; 
+		return t1;
+	}
+
 
 	// << operator
 	friend ostream& operator<<(ostream& console, const Ticket& ticket)
