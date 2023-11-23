@@ -4,7 +4,7 @@
 
 using namespace std;
 
-enum eventType { THEATER, CONCERT, SPORT };
+enum eventType { THEATER, SPORT };
 
 class Ticket {
 private:
@@ -67,11 +67,12 @@ public:
 
 	//proccesing the event
 
+	int eventType = THEATER;
+
 	void event() {
 		switch (eventType) {
+			
 		case THEATER: cout << "You are buying a ticket for a theater play" << endl;
-			break;
-		case CONCERT: cout << "You are buying a ticket for a concert" << endl;
 			break;
 		case SPORT: cout << "You are buying a ticket for a sport match" << endl;
 			break;
@@ -284,6 +285,27 @@ public:
 		
 	}
 
+
+	//a method that prints the content of the ticket
+	void showTicket()
+	{
+		cout << "This event will be provided by the company: " << this->company << "\n";
+
+		if (this->id != nullptr)
+		{
+			
+			
+				cout << "Your id is" << this->id<<"associated with the name"<<this->personName<<"\n";
+			
+		}
+		if (this->number != nullptr)
+		{
+			for (int i = 0; i < this->totalNumber; i++)
+			{
+				cout << "The number of people participating is " << this->number[i] << " people from a total of"<<this->totalNumber ;
+			}
+		}
+	}
 
 	//+ operator
 	friend Ticket operator+(Ticket t1, Ticket t2)
