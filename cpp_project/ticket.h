@@ -8,61 +8,70 @@ enum eventType { THEATER, SPORT };
 
 class Ticket {
 private:
-	string personName="";
-	string company = "";
-	char* id=nullptr;
-	bool isSoldOut=false;
-	int* number=nullptr;
-    int totalNumber = 0;
+	int* price = nullptr; //dynamically defined array of numbers
+	int maximumPrice = 0;
+	char* id = nullptr; //dynamically defined array of characters
+	string personName = "";
+	int age = 0; //statically defined array of numbers
+    const string company;
+
+	static int discount;
+	
 public:
 
 	friend istream& operator>>(istream& console, Ticket& ticket);
 	friend ostream& operator<<(ostream& console, const Ticket& ticket);
 
 	//default constructor
-	Ticket():isSoldOut(false) {
-		this->number = nullptr;
+	Ticket(): company("iaBilet") {
+		this->price = nullptr;
 		this->id = nullptr;
 		this->personName = "";
-		this->company = "";
-		this->totalNumber = 0;
-	}
-	//1st constructor with parameters
-	Ticket(int* number, int totalNumber, char* id)
-	{
-		this->totalNumber = totalNumber;
-		if (number != nullptr)
-		{
-			this->number = new int[totalNumber];
-			for (int i = 0; i < totalNumber; i++)
-			{
-				this->number[i] = number[i];
-			}
-		}
-		else
-		{
-			this->number = nullptr;
-		}
+		
 
+
+		
+	}
+
+
+	//1st constructor with parameters
+	Ticket(string personName, char* id) :company(company)
+	{
+		this->personName = personName;
 		if (id != nullptr) {
 			this->id = new char[strlen(id) + 1];
 			strcpy(this->id, id);
 		}
-		number++;
 	}
 
 
 	//2nd constructor with parameters
-	Ticket(string personName,string company, char* id)
+	Ticket(int* price, int age, int maximumPrice, char* id) : company(company)
 	{
-		this->personName= personName;
-		this->company = company;
+		if (price != nullptr)
+		{
+			this->price= new int[maximumPrice];
+			for (int i = 0; i < maximumPrice; i++)
+			{
+				this->price[i] = price[i];
+			}
+		}
+		else
+		{
+			this->price = nullptr;
+		}
+
+		this->age = age;
+		this->maximumPrice = maximumPrice;
+
 		if (id != nullptr) {
 			this->id = new char[strlen(id) + 1];
 			strcpy(this->id, id);
 		}
-		number++;
+		price++;
 	}
+
+
 
 
 	//proccesing the event
@@ -86,20 +95,21 @@ public:
 
 
 	//copy constructor 
-	Ticket(const Ticket& ticket) {
-		this->isSoldOut = ticket.isSoldOut;
+	Ticket(const Ticket& ticket) : company(company) {
 		this->personName = ticket.personName;
-		this->company = ticket.company;
-		this->totalNumber = ticket.totalNumber;
+		this->age = ticket.age;
+		this->maximumPrice = ticket.maximumPrice;
 		
-		if (ticket.number != nullptr)
+		if (ticket.price != nullptr){}
 		{
-			this->number = new int[this->totalNumber];
-			for (int i = 0; i < this->totalNumber; i++)
+			this->price = new int[this->maximumPrice];
+			for (int i = 0; i < this->maximumPrice; i++)
 			{
-				this->number[i] = ticket.number[i];
+				this->price[i] = ticket.price[i];
 			}
 		}
+
+		
 
 		if (ticket.id != nullptr)
 		{
@@ -110,14 +120,15 @@ public:
 		{
 			this->id = nullptr;
 		}
+
 	}
 
 	//destructor
 	~Ticket()
 	{
-		if (this->number != nullptr)
+		if (this->price != nullptr)
 		{
-			delete[] this->number;
+			delete[] this->price;
 		}
 
 		if (this->id != nullptr)
@@ -126,16 +137,16 @@ public:
 		}
 	}
 
-	//getters
-	int* getNumber()
+	//getter Price
+	int* getPrice()
 	{
 		int* copy;
-		if (this->number != nullptr)
+		if (this->price != nullptr)
 		{
-			copy = new int[this->totalNumber];
-			for (int i = 0; i < this->totalNumber; i++)
+			copy = new int[this->maximumPrice];
+			for (int i = 0; i < this->maximumPrice; i++)
 			{
-				copy[i] = this->number[i];
+				copy[i] = this->price[i];
 			}
 		}
 		else
@@ -146,6 +157,31 @@ public:
 		return copy;
 	}
 
+	//setter Price
+
+	void setPrice(int* price)
+	{
+		if (this->price != nullptr)
+		{
+			delete[] this->price;
+		}
+
+		if (price != nullptr)
+		{
+			this->price = new int[this->maximumPrice];
+			for (int i = 0; i < this->maximumPrice; i++)
+			{
+				this->price[i] = price[i];
+			}
+		}
+		else
+		{
+			this->price = nullptr;
+		}
+	}
+
+	//getter Id
+
 	char* getId()
 	{
 		char* copy = new char[strlen(this->id) + 1];
@@ -153,43 +189,7 @@ public:
 		return copy;
 	}
 
-	bool getValidation()
-	{
-		return this->isSoldOut;
-	}
-	int gettotalNumber()
-	{
-		return this->totalNumber;
-	}
-
-	string getPersonName() {
-		return this->personName;
-	}
-
-	string getCompany() {
-		return this->company;
-	}
-	//setters
-	void setNumber(int* number)
-	{
-		if (this->number != nullptr)
-		{
-			delete[] this->number;
-		}
-
-		if (number != nullptr)
-		{
-			this->number = new int[this->totalNumber];
-			for (int i = 0; i < this->totalNumber; i++)
-			{
-				this->number[i] = number[i];
-			}
-		}
-		else
-		{
-			this->number = nullptr;
-		}
-	}
+	//setter Id
 
 	void setId(const char* id)
 	{
@@ -201,49 +201,76 @@ public:
 		strcpy(this->id, id);
 	}
 
-	void setValidation(bool isSoldOut)
+	//getter Age
+	
+	int getAge()
 	{
-		this->isSoldOut = isSoldOut;
+		return this->age;
 	}
+
+	//setter Age
+
+	void setAge(int age)
+	{
+		this->age = age;
+	}
+
+	//getter Maximum Price
+
+	int getMaximumPrice()
+	{
+		return this->maximumPrice;
+	}
+
+	//setter Maximum Price
+
+	void setMaximumPrice(int maximumPrice)
+	{
+		this->maximumPrice = maximumPrice;
+	}
+
+	//getter Name
+
+	string getPersonName() {
+		return this->personName;
+	}
+
+
+	//setter Name
+
 
 	void setPersonName(string personName)
 	{
 		this->personName = personName;
 	}
 
-	void setTotalNumber(int totalNumber)
-	{
-		this->totalNumber = totalNumber;
-	}
 
 
-	void setCompany(string company)
-	{
-		this->company = company;
-	}
+
 
 
 
 	// overloading of operator =
 	Ticket& operator=(const Ticket& ticket) {
 		if (this != &ticket) {
-			this->isSoldOut = ticket.isSoldOut;
-			this->number = ticket.number;
+			
+			this->age = ticket.age;
 			this->personName = ticket.personName;
-			this->company = ticket.company;
-			this->totalNumber = ticket.totalNumber;
-			if (ticket.number != nullptr)
+			this->maximumPrice = ticket.maximumPrice;
+
+			if (ticket.price != nullptr)
 			{
-				this->number = new int[ticket.totalNumber];
-				for (int i = 0; i < this->totalNumber; i++)
+				this->price = new int[ticket.maximumPrice];
+				for (int i = 0; i < this->maximumPrice; i++)
 				{
-					this->number[i] = ticket.number[i];
+					this->price[i] = ticket.price[i];
 				}
 			}
 			else
 			{
-				this->number = nullptr;
+				this->price = nullptr;
 			}
+
 
 			if (this->id!= nullptr) {
 				delete[] this->id;
@@ -262,28 +289,13 @@ public:
 
 	int operator[](int index)
 	{
-		if (number != 0 && index >= 0 && index < totalNumber)
+		if (price != 0 && index >= 0 && index < maximumPrice)
 		{
-			return number[index];
+			return price[index];
 		}
 	}
 
-	string operator()( int totalnumber, int capacity)
-	{
-		if (this->totalNumber == totalNumber)
-		{
-			if (this->totalNumber > capacity)
-			{
-				return "Exceeds capacity";
-			}
-			else
-			{
-				return "There are still tickets";
-			}
-			
-		}
-		
-	}
+
 
 
 	//a method that prints the content of the ticket
@@ -298,30 +310,32 @@ public:
 				cout << "Your id is" << this->id<<"associated with the name"<<this->personName<<"\n";
 			
 		}
-		if (this->number != nullptr)
+		if (this->price != nullptr)
 		{
-			for (int i = 0; i < this->totalNumber; i++)
+			for (int i = 0; i < this->maximumPrice; i++)
 			{
-				cout << "The number of people participating is " << this->number[i] << " people from a total of"<<this->totalNumber ;
+				cout << "The price for this ticket is " << this->price[i];
+				cout<< " The maximum price for this event is" << this->maximumPrice;
 			}
 		}
 	}
 
-	//+ operator
-	friend Ticket operator+(Ticket t1, Ticket t2)
+	//[] index
+	int& operator[](int index)
 	{
-		t1.totalNumber += t2.totalNumber; 
-		return t1;
+		if (price != nullptr && index >= 0 && index < maximumPrice)
+		{
+			return price[index];
+		}
 	}
-
 
 	// << operator
 	friend ostream& operator<<(ostream& console, const Ticket& ticket)
 	{
 		console << "Person name:" << ticket.personName;
-		console << "Company responsible for selling the tickets:" << ticket.company;
-		console << "id: " << ticket.id;
-		console << "Is it sold out? " << (ticket.isSoldOut ? "yes" : "no");
+		console << "Id: " << ticket.id;
+		console << "Age:" << ticket.age;
+		
 		return console;
 	}
 
@@ -330,14 +344,14 @@ public:
 		cout << "Person name:";
 		console >> ticket.personName;
 
-		cout << "Company responsible for selling the tickets:";
-		console >> ticket.company;
-
+		
 		cout << "ticket ID: ";
 		console >> ticket.id;
 
-		cout << "is valid? (1 = yes, 0 = no): ";
-		console>> ticket.isSoldOut;
+		cout << "Age: ";
+		console >> ticket.age;
+
+		
 		return console;
 	}
 
@@ -345,3 +359,7 @@ public:
 	
 
 };
+
+// initializing static variables
+
+int Ticket::discount = 25;

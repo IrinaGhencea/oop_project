@@ -7,20 +7,23 @@ using namespace std;
 class Theater {
 private:
 
-    char* name = nullptr;
+    char* name = nullptr; //dynamically defined array of characters
     string address= "";
     string artist = "";
     int duration = 0;
-    int numberSeat = 0;
+    int numberSeat = 0; //statically defined array
+    string seat = "";
+    string row = "";
     int numberRow = 0;
-    int occupiedSeats = 0;
-    int occupiedRows = 0;
+    int occupiedSeats = 0; //statically defined array
+    const int max_number_seats;
+
 
 
 
     static int min_number_seats;
-    static int max_number_seats;
-    static int number_rows;
+    
+  
 
 public:
 
@@ -29,28 +32,21 @@ public:
 
 
     // default constructor
-    Theater() {
+    Theater():max_number_seats(1000) {
         this->numberSeat = 0;
+        this->occupiedSeats = 0;
         this->numberRow = 0;
         this->name = nullptr;
         this->duration = 0;
         this->address = "";
         this->artist = "";
+        this->seat = "";
+        this->row = "";
     }
 
     // 1st constructor with parameters
-    Theater( int numberSeat, int numberRow) {
-        this->numberSeat = numberSeat;
-        this->numberRow = numberRow;
-       
-    }
+    Theater(char* name, int numberSeat, int numberRow) :max_number_seats(max_number_seats) {
 
-    // 2nd constructor with parameters
-    Theater(const char* name, string address, string artist, int duration) {
-        this->address = address;
-        this->duration = duration;
-        this->artist = artist;
-        
         if (name != nullptr && strlen(name) < 15) {
             this->name = new char[strlen(name) + 1];
             strcpy(this->name, name);
@@ -58,12 +54,39 @@ public:
         else {
             this->name = nullptr;
         }
+        this->seat = seat;
+        this->row= row;
+        
+       
+    }
+
+    // 2nd constructor with parameters
+    Theater( char* name, string seat, string row, string address, string artist, int duration) :max_number_seats(max_number_seats) {
+
+        if (name != nullptr && strlen(name) < 15) {
+            this->name = new char[strlen(name) + 1];
+            strcpy(this->name, name);
+        }
+        else {
+            this->name = nullptr;
+        }
+        
+        this->name = name;
+        this->address = address;
+        this->artist = artist;
+        this->duration = duration;
+       
+
     }
 
 
     // copy constructor
-    Theater(const Theater& play) {
+    Theater(const Theater& play) :max_number_seats(max_number_seats) {
+        this->seat = play.seat;
         this->numberSeat = play.numberSeat;
+        this->seat = play.seat;
+        this->row = play.row;
+        this->occupiedSeats = play.occupiedSeats;
         this->numberRow = play.numberRow;
         this->address = play.address;
         this->duration= play.duration;
@@ -83,15 +106,43 @@ public:
         delete[] name;
     }
 
-    // getters
+    // getter Number Seats
     int getNumberSeat() {
         return this->numberSeat;
     }
+
+    // setter Number Seats
+
+
+
+    void setNumberSeat(int numberSeat) {
+        if (numberSeat < Theater::max_number_seats || numberSeat > Theater::min_number_seats) {
+            this->numberSeat = numberSeat;
+        }
+        else {
+            throw exception("Invalid");
+        }
+    }
+
+    // getter Number Rows
 
     int getNumberRow() {
         return this->numberRow;
     }
 
+
+    //setter Number Rows
+
+    void setNumberRow(int numberRow) {
+        if (numberRow < Theater::numberRow) {
+            this->numberRow = numberRow;
+        }
+        else {
+            throw exception("Invalid");
+        }
+    }
+
+    //setter name
     char* getName() {
         if (this->name != nullptr) {
             char* copy = new char[strlen(this->name) + 1];
@@ -102,70 +153,8 @@ public:
             return nullptr;
         }
     }
-     
-    string getAddress() {
-        return this->address;
-    }
 
-    string getArtist() {
-        return this->artist;
-    }
-
-    int getDuration() {
-        return this->duration;
-    }
-
-
-    
-    int getNumberOccupiedSeats() {
-        return this->occupiedSeats;
-    }
-    int getNumberOccupiedRows() {
-        return this->occupiedRows;
-    }
-
-    static int getNumberRows() {
-        return number_rows;
-    }
-
-    // setters
-    void setNumberSeat(int numberSeat) {
-        if (numberSeat < Theater::max_number_seats || numberSeat > Theater::min_number_seats) {
-            this->numberSeat = numberSeat;
-        }
-        else {
-            throw exception("Invalid");
-        }
-    }
-
-    void setNumberRow(int numberRow) {
-        if (numberRow < Theater::number_rows) {
-            this->numberRow = numberRow;
-        }
-        else {
-            throw exception("Invalid");
-        }
-    }
-
-    void setAddress(string address) {
-        this->address = address;
-
-    }
-    void setArtist(string artist) {
-        this->artist = artist;
-
-    }
-    
-    
-
-    void setDuration(int duration) {
-        if (duration < 300 || duration > 5) {
-            this->duration = duration;
-        }
-        else {
-            throw exception("Invalid");
-        }
-    }
+    //setter name
 
     void setName(const char* name) {
         if (this->name != nullptr) {
@@ -179,11 +168,108 @@ public:
             this->name = nullptr;
         }
     }
+     
 
-    void setRowNumber(int number_rows)
-    {
-        Theater::number_rows = number_rows;
+    //getter address
+
+    string getAddress() {
+        return this->address;
     }
+
+
+    //setter address
+
+    void setAddress(string address) {
+        this->address = address;
+
+    }
+
+    //getter artist
+    string getArtist() {
+        return this->artist;
+    }
+
+    //setter artist
+
+    void setArtist(string artist) {
+        this->artist = artist;
+
+    }
+
+    //getter duration
+    int getDuration() {
+        return this->duration;
+    }
+
+    //setter duration
+
+    void setDuration(int duration) {
+        if (duration < 300 || duration > 5) {
+            this->duration = duration;
+        }
+        else {
+            throw exception("Invalid");
+        }
+    }
+
+    //getter number seats occupied
+    int occupiedSeats() {
+        return this->occupiedSeats;
+    }
+
+    //setter number seats occupied
+
+    void setOccupiedSeats(int occupiedSeats) {
+        if (occupiedSeats < 100) {
+            throw exception("The event will not take place.");
+
+        }
+        else {
+            this->occupiedSeats = occupiedSeats;
+        }
+        
+    }
+
+    //getter seat
+
+    string getSeat() {
+        return this->seat;
+    }
+
+    //setter seat
+
+    void setSeat(string seat) {
+        this->seat=seat;
+    }
+
+        //getter row
+
+    string getRow() {
+        return this->row;
+    }
+
+    //setter row
+
+    void setRow(string row) {
+        this->row = row;
+    }
+
+        
+    //getter min number of seats
+    static int getMinNumberSeats() {
+        return min_number_seats;
+    }
+
+    // setter min number of seats
+    
+    void setMinNumberSeats(int min_number_seats)
+    {
+        Theater::min_number_seats = min_number_seats;
+    }
+
+
+    
+
 
     // overloading of operator =
     Theater& operator=(const Theater& play) {
@@ -221,7 +307,7 @@ public:
     Theater operator++(int) {
 
         Theater copy = *this;
-        ++occupiedRows;
+        ++occupiedSeats;
         return copy;
 
     }
@@ -229,7 +315,7 @@ public:
     //! operator 
     bool operator!()
     {
-        if (this->numberSeat > max_number_seats || this->numberSeat< min_number_seats)
+        if ( this->numberSeat< min_number_seats|| this->numberSeat>occupiedSeats)
         {
             return true;
         }
@@ -252,18 +338,27 @@ public:
             cout << "PLay's name is" << this->name;
 
         }
+        cout << "Your seat is" << this->seat << "and your row is" << this->row << "\n";
         cout << "The address for where the play takes place is" << this->address << "and the approximate duration is" << this->duration << "\n";
+        cout << "The artist that will perform is" << this->artist << "\n";
 
     }
 
     void showCapacityTeather()
     {
+        if (this->name != nullptr)
+        {
 
+
+            cout << "PLay's name is" << this->name;
+
+        }
         cout << "The number of seats available are " << this->numberSeat << "and the number of rows are" << this->numberRow << "\n";
+        
 
     }
 
-   
+    
 
     //<<operator
     friend ostream& operator<<(ostream& console, const Theater& play) {
@@ -273,18 +368,16 @@ public:
 
             console << "Play's name is: " << play.name << '\n';
         }
-        console << "Play's address is: " << play.address << '\n';
-        console << "Play's duration is: " << play.duration << '\n';
-        console << "The artist that will perform: " << play.artist << '\n';
-        console << "The number of seats that have been occupied is: " << play.numberSeat << '\n';
-        console << "The number of rows that have been occupied is: " << play.numberRow << '\n';
+ 
+        console << "Your seat is: " << play.numberSeat << '\n';
+        console << "Your row is: " << play.numberRow << '\n';
        
 
         return console;
     }
 
     //>> operator
-    friend istream& operator>>(istream& console, Theater& play) {
+      friend istream& operator>>(istream& console, Theater& play) {
         cout <<"Play's name is:"<<'\n';
         char buffer[100];
         console.getline(buffer, 100);
@@ -292,20 +385,13 @@ public:
 
         play.setName(buffer);
 
-        cout << "Play's address is: ";
-        console >>play.address;
+        cout << "Your seat: ";
+        console >>play.seat;
 
-        cout << "Play's duration is: ";
-        console >> play.duration;
+        cout << "Your row: ";
+        console >> play.row;
 
-        cout << "The artist that will perform ";
-        console >> play.artist;
 
-        cout << "The number of seats that have been occupied: ";
-        console >> play.numberSeat;
-
-        cout << "The number of rows that have been occupied: ";
-        console >> play.numberRow;
         return console;
 
 
@@ -317,8 +403,7 @@ public:
 
 // initializing static variables
 int Theater::min_number_seats = 15;
-int Theater::max_number_seats = 350;
-int Theater::number_rows = 20;
+
 
 
 

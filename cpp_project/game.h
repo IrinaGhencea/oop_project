@@ -7,49 +7,48 @@ using namespace std;
 class Game {
 private:
 
-    char* name = nullptr;
+    char* name = nullptr; //dynamically defined array of characters
+    const int minAge;
     string address = "";
+    string teams = "";
+    string seat = "";
+    string row = "";
+    int age = 0; //statically defined array
     int duration = 0;
-    int numberSeat = 0;
-    int numberRow = 0;
-    int occupiedSeats = 0;
-    int occupiedRows = 0;
+    
 
 
+    static int extra;
 
-    static int min_number_seats;
-    static int max_number_seats;
-    static int number_rows;
+    
+  
 
 public:
 
-    friend istream& operator>>(istream& console, Game& play);
-    friend ostream& operator<<(ostream& console, const Game& play);
+    friend istream& operator>>(istream& console, Game& game);
+    friend ostream& operator<<(ostream& console, const Game& game);
 
 
     // default constructor
-    Game() {
-        this->numberSeat = 0;
-        this->numberRow = 0;
+    Game() :minAge(14) {
+
         this->name = nullptr;
         this->duration = 0;
         this->address = "";
+        this->seat = "";
+        this->row = "";
+        this->teams = "";
+    
 
     }
-
-
 
     // 1st constructor with parameters
-    Game(int numberSeat, int numberRow) {
-        this->numberSeat = numberSeat;
-        this->numberRow = numberRow;
-
-    }
-
-    // 2nd constructor with parameters
-    Game(const char* name, string address, int duration) {
+    Game( char* name, string address, int duration,string seat, string row, string teams) :minAge(minAge) {
         this->address = address;
         this->duration = duration;
+        this->seat = seat;
+        this->row = row;
+
 
 
         if (name != nullptr && strlen(name) < 15) {
@@ -61,12 +60,22 @@ public:
         }
     }
 
+    // 2nd constructor with parameters
+    Game(const char* name, int duration ) :minAge(minAge) {
+
+        
+
+    }
+
+    
+
 
 
     // copy constructor
-    Game(const Game& game) {
-        this->numberSeat = game.numberSeat;
-        this->numberRow = game.numberRow;
+    Game(const Game& game) :minAge(minAge) {
+        this->seat = game.seat;
+        this->row = game.row;
+        this->teams = game.teams;
         this->address = game.address;
         this->duration = game.duration;
 
@@ -84,13 +93,14 @@ public:
         delete[] name;
     }
 
-    // getters
-    int getNumberSeat() {
-        return this->numberSeat;
+    
+    string getSeat() {
+        return this->seat;
     }
 
-    int getNumberRow() {
-        return this->numberRow;
+
+    string getRow() {
+        return this->row;
     }
 
     char* getName() {
@@ -101,64 +111,6 @@ public:
         }
         else {
             return nullptr;
-        }
-    }
-
-    string getAddress() {
-        return this->address;
-    }
-
-
-    int getDuration() {
-        return this->duration;
-    }
-
-
-
-    int getNumberOccupiedSeats() {
-        return this->occupiedSeats;
-    }
-    int getNumberOccupiedRows() {
-        return this->occupiedRows;
-    }
-
-    static int getNumberRows() {
-        return number_rows;
-    }
-
-    // setters
-    void setNumberSeat(int numberSeat) {
-        if (numberSeat < Game::max_number_seats || numberSeat > Game::min_number_seats) {
-            this->numberSeat = numberSeat;
-        }
-        else {
-            throw exception("No more seats!");
-        }
-    }
-
-    void setNumberRow(int numberRow) {
-        if (numberRow < Game::number_rows) {
-            this->numberRow = numberRow;
-        }
-        else {
-            throw exception("No more rows");
-        }
-    }
-
-    void setAddress(string address) {
-        this->address = address;
-
-    }
-
-
-
-
-    void setDuration(int duration) {
-        if (duration < 300 || duration > 5) {
-            this->duration = duration;
-        }
-        else {
-            throw exception("Invalid");
         }
     }
 
@@ -175,16 +127,67 @@ public:
         }
     }
 
-    void setRowNumber(int number_rows)
-    {
-        Game::number_rows = number_rows;
+    string getAddress() {
+        return this->address;
     }
+
+
+    void setAddress(string address) {
+        this->address = address;
+
+    }
+
+    string getTeams() {
+        return this->teams;
+    }
+
+
+    void setTeams(string teams) {
+        this->teams = teams;
+
+    }
+
+    int getDuration() {
+        return this->duration;
+    }
+
+    void setDuration(int duration) {
+        if (duration < 300 || duration > 5) {
+            this->duration = duration;
+        }
+        else {
+            throw exception("Invalid");
+        }
+    }
+
+
+     
+
+    static int getExtra() {
+        return extra;
+    }
+
+    void setExtra(int extra)
+    {
+        Game::extra = extra;
+    }
+    
+
+
+
+
+
+
+    
+
+
+
 
     // overloading of operator =
     Game& operator=(const Game& game) {
         if (this != &game) {
-            this->numberSeat = game.numberSeat;
-            this->numberRow = game.numberRow;
+            this->seat = game.seat;
+            this->row = game.row;
             this->address = game.address;
             this->duration = game.duration;
             if (this->name != nullptr) {
@@ -201,39 +204,26 @@ public:
         return *this;
     }
 
-    //++ operator-preincrement. It counts the number of seats that have been occupied
+    //++ operator-preincrement. It counts the duration
     Game& operator++() {
-        ++occupiedSeats;
-        ++numberSeat;
+        ++duration;
+        
         return*this;
 
     }
 
 
 
-    //++ operator-postincrement. It counts the number of rows that have been occupied
+    //++ operator-postincrement. It counts the duration
     Game operator++(int) {
 
         Game copy = *this;
-        ++occupiedRows;
+        ++duration;
         return copy;
 
     }
 
-    //! operator 
-    bool operator!()
-    {
-        if (this->numberSeat > max_number_seats || this->numberSeat < min_number_seats)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-
-    }
+   
 
     //a method that prints the details
     void showDetailsGame()
@@ -246,17 +236,12 @@ public:
             cout << "Game's name is" << this->name;
 
         }
-        cout << "The address for this game is" << this->address << "and the approximate duration is" << this->duration << "\n";
+        cout << "Your seat is" << this->seat << "and your row is" << this->row<<"\n";
+        cout << "The address for this game is" << this->address << "and the teams that are playing" << this->teams << "\n";
 
     }
 
-    //a method that prints the capacity
-    void showCapacityGame()
-    {
-
-        cout << "The number of seats available are " << this->numberSeat << "and the number of rows are" << this->numberRow << "\n";
-
-    }
+    
 
 
 
@@ -270,10 +255,10 @@ public:
 
             console << "Game's name is: " << game.name << '\n';
         }
-        console << "Game's address is: " << game.address << '\n';
-        console << "Game's duration is: " << game.duration << '\n';
-        console << "The number of seats that have been occupied is: " << game.numberSeat << '\n';
-        console << "The number of rows that have been occupied is: " << game.numberRow << '\n';
+        console << "Your age:";
+        console << "Your seat is: " << game.seat << '\n';
+        console << "Your row is: " << game.row<< '\n';
+      
 
 
         return console;
@@ -288,18 +273,18 @@ public:
 
         game.setName(buffer);
 
-        cout << "Game's address is: ";
-        console >> game.address;
 
-        cout << "Game's duration is: ";
-        console >> game.duration;
+        cout << "Your age:";
+        console >> game.age;
 
 
-        cout << "The number of seats that have been occupied: ";
-        console >> game.numberSeat;
+        cout << "Your seat is: ";
+        console >> game.seat;
 
-        cout << "The number of rows that have been occupied: ";
-        console >> game.numberRow;
+        cout << "Your row is: ";
+        console >> game.row;
+
+       
         return console;
 
 
@@ -309,11 +294,9 @@ public:
 
 };
 
-// initializing static variables
-int Game::min_number_seats = 100;
-int Game::max_number_seats = 20000;
-int Game::number_rows = 50;
 
+// initializing static variables
+int Game::extra = 15;
 
 
 
