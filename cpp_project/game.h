@@ -14,7 +14,7 @@ private:
     string seat = "";
     string row = "";
     int age = 0; //statically defined array
-    int duration = 0;
+    int duration = 0; 
     
 
 
@@ -24,9 +24,6 @@ private:
   
 
 public:
-
-    friend istream& operator>>(istream& console, Game& game);
-    friend ostream& operator<<(ostream& console, const Game& game);
 
 
     // default constructor
@@ -43,9 +40,9 @@ public:
     }
 
     // 1st constructor with parameters
-    Game( char* name, string address, int duration,string seat, string row, string teams) :minAge(minAge) {
+    Game( char* name, string address,string seat, string row, string teams) :minAge(minAge) {
         this->address = address;
-        this->duration = duration;
+        this->teams = teams;
         this->seat = seat;
         this->row = row;
 
@@ -61,9 +58,15 @@ public:
     }
 
     // 2nd constructor with parameters
-    Game(const char* name, int duration ) :minAge(minAge) {
+    Game( char* name, int duration ) :minAge(minAge) {
 
+        if (name != nullptr&& strlen(name)<15) {
+            this->name = new char[strlen(name) + 1];
+            strcpy(this->name, name);
+
+        }
         
+        this->duration = duration;
 
     }
 
@@ -204,28 +207,14 @@ public:
         return *this;
     }
 
-    //++ operator-preincrement. It counts the duration
-    Game& operator++() {
-        ++duration;
-        
-        return*this;
-
-    }
+   
 
 
 
-    //++ operator-postincrement. It counts the duration
-    Game operator++(int) {
-
-        Game copy = *this;
-        ++duration;
-        return copy;
-
-    }
 
    
 
-    //a method that prints the details
+    //generic method that prints the details
     void showDetailsGame()
     {
 
@@ -233,31 +222,94 @@ public:
         {
 
 
-            cout << "Game's name is" << this->name;
+            cout << "Game's name is " << this->name<<"\n";
 
         }
-        cout << "Your seat is" << this->seat << "and your row is" << this->row<<"\n";
-        cout << "The address for this game is" << this->address << "and the teams that are playing" << this->teams << "\n";
+        cout << "Your seat is " << this->seat << " and your row is " << this->row<<"\n";
+        cout << "The address for this game is " << this->address << " and the teams that are playing " << this->teams << "\n";
+
+    }
+
+    void showDuration() {
+        if (this->name != nullptr)
+        {
+
+
+            cout << "For this " << this->name << " the duration is " << this->duration << "\n"; "\n";
+
+        }
+        
+    }
+  
+
+    //[] operator
+    int operator[](int index)
+    {
+        if (name != 0 && index >= 0 && index < strlen(this->name) + 1)
+        {
+            return name[index];
+        }
+        else throw exception("invalid index");
+    }
+
+
+     //! operator
+    bool operator!() {
+         if (this->duration == 0) {
+             return false;
+         }
+         else return true;
+     }
+
+     //++operator preincrementation 
+
+    Game& operator++()
+     {
+         this->duration++;
+
+         return *this;
+     }
+
+    //++operator postincrementation
+    Game operator++(int i) {
+        Game copy = *this;
+        this->duration++;
+        return copy;
 
     }
 
     
 
+    //+ operator
+    Game& operator+(int x) {
+        Game copy = *this;
+        copy.duration =this->duration + x;
+        return copy;
+    }
 
+    //== operator 
+    bool operator==(const Game& game) {
+        if (this->duration == game.duration && this->age == game.age && strcmp(this->name, game.name) == 0)
+            return true;
+        else return false;
+    }
 
+   
+    friend istream& operator>>(istream& console, Game& game);
+    friend ostream& operator<<(ostream& console, const Game& game);
 
 
     //<<operator
-    friend ostream& operator<<(ostream& console, const Game& game) {
+     friend ostream& operator<<(ostream& console, const Game& game) {
 
 
         if (game.name != nullptr) {
 
-            console << "Game's name is: " << game.name << '\n';
+            console << "Game's name is : " << game.name << '\n';
         }
-        console << "Your age:";
-        console << "Your seat is: " << game.seat << '\n';
-        console << "Your row is: " << game.row<< '\n';
+        console << "Your age :";
+        console << "Your seat is : " << game.seat << '\n';
+        console << "Your row is : " << game.row<< '\n';
       
 
 
@@ -266,7 +318,7 @@ public:
 
     //>> operator
     friend istream& operator>>(istream& console, Game& game) {
-        cout << "Game's name is:" << '\n';
+        cout << "Game's name is :" << '\n';
         char buffer[100];
         console.getline(buffer, 100);
         console.clear();
@@ -274,7 +326,7 @@ public:
         game.setName(buffer);
 
 
-        cout << "Your age:";
+        cout << "Your age: ";
         console >> game.age;
 
 

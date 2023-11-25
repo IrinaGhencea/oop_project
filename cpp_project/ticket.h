@@ -19,8 +19,6 @@ private:
 	
 public:
 
-	friend istream& operator>>(istream& console, Ticket& ticket);
-	friend ostream& operator<<(ostream& console, const Ticket& ticket);
 
 	//default constructor
 	Ticket(): company("iaBilet") {
@@ -46,7 +44,7 @@ public:
 
 
 	//2nd constructor with parameters
-	Ticket(int* price, int age, int maximumPrice, char* id) : company(company)
+	Ticket(int* price, string personName, int age, int maximumPrice, char* id) : company(company)
 	{
 		if (price != nullptr)
 		{
@@ -63,6 +61,7 @@ public:
 
 		this->age = age;
 		this->maximumPrice = maximumPrice;
+		this->personName = personName;
 
 		if (id != nullptr) {
 			this->id = new char[strlen(id) + 1];
@@ -81,9 +80,9 @@ public:
 	void event() {
 		switch (eventType) {
 			
-		case THEATER: cout << "You are buying a ticket for a theater play" << endl;
+		case THEATER: cout << "You are buying a ticket for a theater play " << endl;
 			break;
-		case SPORT: cout << "You are buying a ticket for a sport match" << endl;
+		case SPORT: cout << "You are buying a ticket for a sport match " << endl;
 			break;
 		}
 	
@@ -95,22 +94,18 @@ public:
 
 
 	//copy constructor 
-	Ticket(const Ticket& ticket) : company(company) {
+	Ticket(const Ticket& ticket) : company(ticket.company) {
 		this->personName = ticket.personName;
 		this->age = ticket.age;
 		this->maximumPrice = ticket.maximumPrice;
 		
-		if (ticket.price != nullptr){}
-		{
+
+		if (ticket.price != nullptr) {
 			this->price = new int[this->maximumPrice];
-			for (int i = 0; i < this->maximumPrice; i++)
-			{
+			for (int i = 0; i < this->maximumPrice; i++) {
 				this->price[i] = ticket.price[i];
 			}
 		}
-
-		
-
 		if (ticket.id != nullptr)
 		{
 			this->id = new char[strlen(ticket.id) + 1];
@@ -120,8 +115,13 @@ public:
 		{
 			this->id = nullptr;
 		}
-
 	}
+
+		
+
+
+
+	
 
 	//destructor
 	~Ticket()
@@ -161,11 +161,6 @@ public:
 
 	void setPrice(int* price)
 	{
-		if (this->price != nullptr)
-		{
-			delete[] this->price;
-		}
-
 		if (price != nullptr)
 		{
 			this->price = new int[this->maximumPrice];
@@ -176,7 +171,7 @@ public:
 		}
 		else
 		{
-			this->price = nullptr;
+			throw ("Invalid price");
 		}
 	}
 
@@ -193,12 +188,19 @@ public:
 
 	void setId(const char* id)
 	{
-		if (this->id != nullptr)
+		if (id != nullptr)
 		{
-			delete[] this->id;
+			if (this->id != nullptr)
+			{
+				delete[] this->id;
+			}
+			this->id = new char[strlen(id) + 1];
+			strcpy(this->id, id);
 		}
-		this->id = new char[strlen(id) + 1];
-		strcpy(this->id, id);
+		else
+		{
+			throw ("invalid id");
+		}
 	}
 
 	//getter Age
@@ -226,7 +228,14 @@ public:
 
 	void setMaximumPrice(int maximumPrice)
 	{
-		this->maximumPrice = maximumPrice;
+		if (maximumPrice > 0)
+		{
+			this->maximumPrice = maximumPrice;
+		}
+		else
+		{
+			throw ("invalid price");
+		}
 	}
 
 	//getter Name
@@ -287,13 +296,7 @@ public:
 	}
 
 
-	int operator[](int index)
-	{
-		if (price != 0 && index >= 0 && index < maximumPrice)
-		{
-			return price[index];
-		}
-	}
+	
 
 
 
@@ -307,7 +310,7 @@ public:
 		{
 			
 			
-				cout << "Your id is" << this->id<<"associated with the name"<<this->personName<<"\n";
+				cout << "Your id is" << this->id<<"associated with the name "<<this->personName<<"\n";
 			
 		}
 		if (this->price != nullptr)
@@ -315,20 +318,54 @@ public:
 			for (int i = 0; i < this->maximumPrice; i++)
 			{
 				cout << "The price for this ticket is " << this->price[i];
-				cout<< " The maximum price for this event is" << this->maximumPrice;
+				cout<< " The maximum price for this event is " << this->maximumPrice;
 			}
 		}
 	}
 
-	//[] index
-	int& operator[](int index)
+	//[] operator
+	int operator[](int index)
 	{
-		if (price != nullptr && index >= 0 && index < maximumPrice)
+		if (id != 0 && index >= 0 && index < strlen(this->id) + 1)
 		{
-			return price[index];
+			return id[index];
 		}
+		else throw exception("invalid index");
 	}
 
+	
+
+	//pre decrement operator
+	Ticket& operator--() {
+		if (this->price != nullptr) {
+			this->price[1]--;
+		}
+		return *this;
+	}
+
+	//post decrement operator 
+	Ticket operator--(int i) {
+		Ticket copy = *this;
+		if (this->price != nullptr) {
+
+			this->price[1]--;
+		}
+		return copy;
+	}
+
+	//== operator 
+	bool operator==(const Ticket& ticket) {
+		if (this->maximumPrice == ticket.maximumPrice && this->price == ticket.price && strcmp(this->id, ticket.id) == 0)
+			return true;
+		else
+			return false;
+	}
+
+	
+
+	friend istream& operator>>(istream& console, Ticket& ticket);
+	friend ostream& operator<<(ostream& console, const Ticket& ticket);
+	
 	// << operator
 	friend ostream& operator<<(ostream& console, const Ticket& ticket)
 	{
@@ -339,6 +376,7 @@ public:
 		return console;
 	}
 
+	
 	// >> operator 
 	friend istream& operator>>(istream& console, Ticket& ticket) {
 		cout << "Person name:";

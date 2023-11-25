@@ -8,26 +8,40 @@ using namespace std;
 
 
 int main() {
+    //game
 
-    Game g1("game1", "address", "100", "2", "10", "Steaua-Dinamo");
+   
+    char name[] = "game1";
+    Game g1(name, "Arena Nationala", "24", "30", "Steaua-Dinamo");
     g1.showDetailsGame();
+    Game g2(name, 130);
+    g2.showDuration();
+    cout << !g1 << "\n";
+    cout << !g2 << "\n";
+    Game g3;
+    g3 = ++g2;
+    cout << g3 << "\n";
+    
+   
     Game g;
     cin >> g;
 
     cout << g;
   
-    Theater t1("play1", "3", "12", "address","artist", 30);
-    t1.showDetailsTheater();
+    //theater
+
+    
 
     Theater t;
     cin >> t;
 
     cout << t;
 
-    Ticket t1;
-    cin >> t1;
+    //ticket
+    Ticket t2;
+    cin >> t2;
 
-    cout << t1;
+    cout << t2;
     Ticket event();
     return 0;
 }
