@@ -35,12 +35,13 @@ public:
         this->seat = "";
         this->row = "";
         this->teams = "";
+        this->age = 0;
     
 
     }
 
     // 1st constructor with parameters
-    Game( char* name, string address,string seat, string row, string teams) :minAge(minAge) {
+    Game( char* name, string address,string seat, string row, string teams, int minAge) :minAge(minAge) {
         this->address = address;
         this->teams = teams;
         this->seat = seat;
@@ -58,7 +59,7 @@ public:
     }
 
     // 2nd constructor with parameters
-    Game( char* name, int duration ) :minAge(minAge) {
+    Game( char* name, int duration, int minAge ) :minAge(minAge) {
 
         if (name != nullptr&& strlen(name)<15) {
             this->name = new char[strlen(name) + 1];
@@ -235,7 +236,7 @@ public:
         {
 
 
-            cout << "Game's name is " << this->name<<"\n";
+            cout << "Game's name is " << this->name<<"and the minimum age is "<<this->minAge<<"\n";
 
         }
         cout << "Your seat is " << this->seat << " and your row is " << this->row<<"\n";
@@ -248,7 +249,8 @@ public:
         {
 
 
-            cout << "For this " << this->name << " the duration is " << this->duration << "\n"; "\n";
+            cout << "For this " << this->name << " the duration is " << this->duration << "\n"; 
+            
 
         }
         

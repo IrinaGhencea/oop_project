@@ -14,6 +14,7 @@ private:
 	string personName;
 	int age; //statically defined array of numbers
     const string company;
+	eventType type = SPORT;
 
 	static int discount;
 	
@@ -21,7 +22,7 @@ public:
 
 
 	//default constructor
-	Ticket(): company("iaBilet") {
+	Ticket(): company("iaBilet"), type(SPORT) {
 		this->price = nullptr;
 		this->id = nullptr;
 		this->personName = "";
@@ -33,7 +34,7 @@ public:
 
 
 	//1st constructor with parameters
-	Ticket(string company, string personName, char* id) :company(company)
+	Ticket(string company, string personName, char* id) :company(company), type(SPORT)
 	{   
 		this->personName = personName;
 		if (id != nullptr) {
@@ -44,7 +45,7 @@ public:
 
 
 	//2nd constructor with parameters
-	Ticket(int* price, string personName,string company, int age, int maximumPrice, char* id) : company(company)
+	Ticket(int* price, string personName,string company, int age, int maximumPrice, char* id) : company(company), type(SPORT)
 	{
 		if (price != nullptr)
 		{
@@ -73,28 +74,10 @@ public:
 
 
 
-	//proccesing the event
-
-	int eventType = THEATER;
-
-	void event() {
-		switch (eventType) {
-			
-		case THEATER: cout << "You are buying a ticket for a theater play " << endl;
-			break;
-		case SPORT: cout << "You are buying a ticket for a sport match " << endl;
-			break;
-		}
-	
-
-
-	}
-
-
 
 
 	//copy constructor 
-	Ticket(const Ticket& ticket) : company(ticket.company) {
+	Ticket(const Ticket& ticket) : company(ticket.company), type(SPORT) {
 		this->personName = ticket.personName;
 		this->age = ticket.age;
 		this->maximumPrice = ticket.maximumPrice;
@@ -135,6 +118,23 @@ public:
 		{
 			delete[] this->id;
 		}
+	}
+
+	//proccesing the event
+
+
+
+	void event() {
+		switch (type) {
+
+		case THEATER: cout << "You are buying a ticket for a theater play " << endl;
+			break;
+		case SPORT: cout << "You are buying a ticket for a sport match " << endl;
+			break;
+		}
+
+
+
 	}
 
 	//getter Price
@@ -391,7 +391,7 @@ public:
 	// << operator
 	friend ostream& operator<<(ostream& console, const Ticket& ticket)
 	{
-		console << "Person name:" << ticket.personName;
+		console << " Person name:" << ticket.personName<<"\n";
 		console << "Id: " << ticket.id;
 		console << "Age:" << ticket.age;
 		
@@ -406,7 +406,11 @@ public:
 
 		
 		cout << "ticket ID: ";
-		console >> ticket.id;
+		
+		char buffer[100];
+		console.getline(buffer, 100);
+		console.clear();
+		ticket.setId(buffer);
 
 		cout << "Age: ";
 		console >> ticket.age;

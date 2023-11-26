@@ -19,6 +19,7 @@ private:
 public:
 
 
+
     // default constructor
     Theater() {
         this->numberSeat = 0;
