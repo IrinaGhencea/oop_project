@@ -8,6 +8,8 @@ using namespace std;
 
 
 int main() {
+    Ticket event();
+
     //game
 
    
@@ -29,8 +31,12 @@ int main() {
     cout << g;
   
     //theater
-
-    
+    char name1[] = "play1";
+    Theater th(name1, 23, 25);
+    th.showCapacity();
+    int i[]{ 100, 200, 300 };
+    Theater th2(name, 20, 30, i);
+    th2.showAvailability();
 
     Theater t;
     cin >> t;
@@ -38,10 +44,14 @@ int main() {
     cout << t;
 
     //ticket
+   
+    char id[] = "764346426";
+    int price1[]{ 15, 20, 25 };
+    Ticket ticket1(price1, "name","iaBilet", 15, 200, id);
+    ticket1.showPrice();
     Ticket t2;
     cin >> t2;
 
     cout << t2;
-    Ticket event();
     return 0;
 }

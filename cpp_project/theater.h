@@ -6,11 +6,11 @@ using namespace std;
 
 class Theater {
 private:
-    char* name = nullptr; //dynamically defined array
-    int numberSeat = 0; //statically defined array of numbers
-    int numberRow = 0;
-    int occupiedSeats = 0;
-    int* occupiedRows = nullptr; //dynamically defined array of numbers
+    char* name; //dynamically defined array
+    int numberSeat; //statically defined array of numbers
+    int numberRow;
+    int occupiedSeats;
+    int* occupiedRows; //dynamically defined array of numbers
 
     static int min_number_seats;
     static int max_number_seats;
@@ -85,10 +85,10 @@ public:
         if (occupiedRows != nullptr) {
             delete[] this->occupiedRows;
         }
-        delete[] name;
+        delete[] this->name;
     }
 
-    // getters
+  
     int getNumberSeat() {
         return this->numberSeat;
     }
@@ -132,7 +132,7 @@ public:
 
         return copy;
     }
-    //setters
+    
     void setNumberSeat(int numberSeat) {
         if (numberSeat < Theater::max_number_seats || numberSeat > Theater::min_number_seats) {
             this->numberSeat = numberSeat;
@@ -236,13 +236,13 @@ public:
             cout << "For the play " << this->name<<"\n";
 
         }
-        cout << " the number of seats that have been already occupied is " << this->occupiedSeats << "\n";
+        cout << " the number of seats that have already been occupied is " << this->occupiedSeats << "\n";
 
         if (this->occupiedRows != nullptr)
         {
             for (int i = 0; i < this->numberRow; i++)
             {
-                cout << " and the number of rows that have been already occupied is " << this->occupiedRows[i] << "\n";
+                cout << " and the number of rows that have already been occupied is " << this->occupiedRows[i] <<"out of "<<this->numberRow<<"\n";
             }
         }
 
@@ -355,7 +355,7 @@ public:
 
     //>> operator
     friend istream& operator>>(istream& console, Theater& play) {
-        cout << endl << "Play's name is:";
+        cout << endl << "Play's name is: "<<"\n";
         char buffer[100];
         console.getline(buffer, 100);
         console.clear();

@@ -8,11 +8,11 @@ enum eventType { THEATER, SPORT };
 
 class Ticket {
 private:
-	int* price = nullptr; //dynamically defined array of numbers
-	int maximumPrice = 0;
-	char* id = nullptr; //dynamically defined array of characters
-	string personName = "";
-	int age = 0; //statically defined array of numbers
+	int* price; //dynamically defined array of numbers
+	int maximumPrice;
+	char* id; //dynamically defined array of characters
+	string personName;
+	int age; //statically defined array of numbers
     const string company;
 
 	static int discount;
@@ -33,8 +33,8 @@ public:
 
 
 	//1st constructor with parameters
-	Ticket(string personName, char* id) :company(company)
-	{
+	Ticket(string company, string personName, char* id) :company(company)
+	{   
 		this->personName = personName;
 		if (id != nullptr) {
 			this->id = new char[strlen(id) + 1];
@@ -44,7 +44,7 @@ public:
 
 
 	//2nd constructor with parameters
-	Ticket(int* price, string personName, int age, int maximumPrice, char* id) : company(company)
+	Ticket(int* price, string personName,string company, int age, int maximumPrice, char* id) : company(company)
 	{
 		if (price != nullptr)
 		{
@@ -214,7 +214,17 @@ public:
 
 	void setAge(int age)
 	{
-		this->age = age;
+		if (age < 0||age>120) {
+			throw exception("invalid age");
+		}
+		else this->age = age;
+
+		if (age < 14) {
+			discount = 15;
+		}
+		else {
+			discount = 0;
+		}
 	}
 
 	//getter Maximum Price
@@ -250,11 +260,23 @@ public:
 
 	void setPersonName(string personName)
 	{
-		this->personName = personName;
+		
+		if (personName.size() < 1) {
+			throw exception("insufficient information");
+
+		}
+		else { 
+			this->personName = personName;
+		}
+	}
+
+	//company
+	string getCompany() const {
+		return company;
 	}
 
 
-
+	
 
 
 
@@ -301,8 +323,8 @@ public:
 
 
 
-	//a method that prints the content of the ticket
-	void showTicket()
+	//a method that prints the price of the ticket
+	void showPrice()
 	{
 		cout << "This event will be provided by the company: " << this->company << "\n";
 

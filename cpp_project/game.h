@@ -7,14 +7,14 @@ using namespace std;
 class Game {
 private:
 
-    char* name = nullptr; //dynamically defined array of characters
+    char* name; //dynamically defined array of characters
     const int minAge;
-    string address = "";
-    string teams = "";
-    string seat = "";
-    string row = "";
-    int age = 0; //statically defined array
-    int duration = 0; 
+    string address;
+    string teams;
+    string seat;
+    string row;
+    int age; //statically defined array
+    int duration; 
     
 
 
@@ -131,12 +131,19 @@ public:
     }
 
     string getAddress() {
-        return this->address;
+       
+            return this->address;
+        
     }
 
 
     void setAddress(string address) {
-        this->address = address;
+        if (address.size() < 1) {
+            throw exception("insufficient information");
+        }
+        else {
+            this->address = address;
+        }
 
     }
 
@@ -146,7 +153,13 @@ public:
 
 
     void setTeams(string teams) {
-        this->teams = teams;
+        if (teams.size() < 1) {
+            throw exception("insufficient information");
+        }
+        else {
+            this->teams = teams;
+        }
+
 
     }
 
