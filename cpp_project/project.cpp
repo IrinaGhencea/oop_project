@@ -9,9 +9,6 @@ using namespace std;
 
 int main() {
 
-    Ticket event();
-    
-
     //game
 
    
@@ -32,7 +29,7 @@ int main() {
     cout << g3.getDuration()<<"\n";
    
 
-    //cout << g3[1];
+    cout << g3[1];
 
     /*Game g4 = g2 + 20;
     cout << g4.getDuration();*/
@@ -53,7 +50,7 @@ int main() {
 
     int i[]{ 100, 200, 300 };
 
-    Theater th2(name, 20, 30, i);
+    Theater th2(name1, 20, 3, i);
 
     th2.showAvailability();
 
@@ -63,29 +60,38 @@ int main() {
 
     Theater th5 = ++th3;
 
-   /* if (th5 == th4) {
+    if (th5 == th4) {
         cout << "are equal";
     }
     else {
         cout << "not equal";
-    }*/
+    }
 
-  /*  cout << th5[2];
-    Theater th6 = th4 + th5;*/
-    
+   /* cout << th5[2];
+    Theater th6 = th4 + th5;
+    */
     Theater t;
 
     cin >> t;
 
     cout << t;
 
+    //cinema
+    string movies[]{ "Spiderman1","Iron Man", "Thor" };
+
+    Cinema c(name1, 67, 90, i, movies, 3);
+
+    /*cin >> c;
+    cout << c;*/
+
+
     //ticket
    
-    char id[] = "764346426";
+    char id []="767676";
 
-    int price1[]{ 15, 20 };
+    int price1[]{ 15, 20, 30 };
 
-    Ticket ticket1(price1, "name","iaBilet", 5, 200, id);
+    Ticket ticket1(price1, "name","iaBilet", 5, 3, id);
 
     ticket1.showPrice();
 
@@ -99,18 +105,20 @@ int main() {
 
     cout << t4.getPrice();
 
-   /* cout << t3[1];
+    cout << t3[1];
     
     if (t4 == t3) { 
         cout <<  "are equal.";
     }
     else {
         cout << " are not equal.";
-    }*/
+    }
 
 
     cin >> t2;
 
     cout << t2;
-    return 0;
+    
+
+  
 }

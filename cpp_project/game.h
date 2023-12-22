@@ -59,18 +59,17 @@ public:
     }
 
     // 2nd constructor with parameters
-    Game( char* name, int duration, int minAge ) :minAge(minAge) {
-
-        if (name != nullptr&& strlen(name)<15) {
+    Game(char* name, int duration, int minAge) : minAge(minAge) {
+        if (name != nullptr && strlen(name) < 15) {
             this->name = new char[strlen(name) + 1];
             strcpy(this->name, name);
-
         }
-        
+        else {
+            this->name = nullptr; 
+        }
+
         this->duration = duration;
-
     }
-
     
 
 
@@ -310,52 +309,11 @@ public:
     }
 
    
-    friend istream& operator>>(istream& console, Game& game);
-    friend ostream& operator<<(ostream& console, const Game& game);
+    friend istream& operator>>(istream& console, Game&);
+    friend ostream& operator<<(ostream& console, const Game );
 
 
-    //<<operator
-     friend ostream& operator<<(ostream& console, const Game& game) {
-
-
-        if (game.name != nullptr) {
-
-            console << "Game's name is : " << game.name << '\n';
-        }
-        console << "Your age :";
-        console << "Your seat is : " << game.seat << '\n';
-        console << "Your row is : " << game.row<< '\n';
-      
-
-
-        return console;
-    }
-
-    //>> operator
-    friend istream& operator>>(istream& console, Game& game) {
-        cout << "Game's name is :" << '\n';
-        char buffer[100];
-        console.getline(buffer, 100);
-        console.clear();
-
-        game.setName(buffer);
-
-
-        cout << "Your age: ";
-        console >> game.age;
-
-
-        cout << "Your seat is: ";
-        console >> game.seat;
-
-        cout << "Your row is: ";
-        console >> game.row;
-
-       
-        return console;
-
-
-    }
+   
 
 
 
@@ -365,5 +323,47 @@ public:
 // initializing static variables
 int Game::extra = 15;
 
+
+//<<operator
+ ostream& operator<<(ostream& console, const Game game) {
+
+
+    if (game.name != nullptr) {
+
+        console << "Game's name is : " << game.name << '\n';
+    }
+    console << "Your age :"<<'\n';
+    console << "Your seat is : " << game.seat << '\n';
+   
+
+
+
+    return console;
+}
+
+//>> operator
+istream& operator>>(istream& console, Game& game) {
+    cout << "Game's name is :" << '\n';
+    char buffer[100];
+    console.getline(buffer, 100);
+    console.clear();
+
+    game.setName(buffer);
+
+
+    cout << "Your age: "<<'\n';
+    console >> game.age;
+
+
+    cout << "Your seat is: " << '\n';
+    console >> game.seat;
+
+   
+
+
+    return console;
+
+
+}
 
 

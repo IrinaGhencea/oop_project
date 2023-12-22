@@ -332,15 +332,15 @@ public:
 		{
 			
 			
-				cout << "Your id is" << this->id<<"associated with the name "<<this->personName<<"\n";
+				cout << "Your id is " << this->id<<" associated with the name "<<this->personName<<"\n";
 			
 		}
 		if (this->price != nullptr)
 		{
 			for (int i = 0; i < this->maximumPrice; i++)
 			{
-				cout << "The price for this ticket is " << this->price[i];
-				cout<< " The maximum price for this event is " << this->maximumPrice;
+				cout << "The price for this ticket is " << this->price[i] << '\n';
+				cout<< " The maximum price for this event is " << this->maximumPrice << '\n';
 			}
 		}
 	}
@@ -386,38 +386,9 @@ public:
 	
 
 	friend istream& operator>>(istream& console, Ticket& ticket);
-	friend ostream& operator<<(ostream& console, const Ticket& ticket);
+	friend ostream& operator<<(ostream& console, const Ticket ticket);
 	
-	// << operator
-	friend ostream& operator<<(ostream& console, const Ticket& ticket)
-	{
-		console << " Person name:" << ticket.personName<<"\n";
-		console << "Id: " << ticket.id;
-		console << "Age:" << ticket.age;
-		
-		return console;
-	}
-
 	
-	// >> operator 
-	friend istream& operator>>(istream& console, Ticket& ticket) {
-		cout << "Person name:";
-		console >> ticket.personName;
-
-		
-		cout << "ticket ID: ";
-		
-		char buffer[100];
-		console.getline(buffer, 100);
-		console.clear();
-		ticket.setId(buffer);
-
-		cout << "Age: ";
-		console >> ticket.age;
-
-		
-		return console;
-	}
 
 
 	
@@ -427,3 +398,36 @@ public:
 // initializing static variables
 
 int Ticket::discount = 25;
+
+
+// << operator
+ostream& operator<<(ostream& console, const Ticket ticket)
+{
+	console << " Person name:" << ticket.personName << "\n";
+	console << "Id: " << ticket.id << '\n';
+	console << "Age:" << ticket.age << '\n';
+
+	return console;
+}
+
+
+// >> operator 
+ istream& operator>>(istream& console, Ticket& ticket) {
+	cout << "Person name:" << '\n';
+	console >> ticket.personName;
+
+
+	cout << "ticket ID: " << '\n';
+
+	char buffer[100];
+	console.getline(buffer, 100);
+	console.clear();
+	ticket.setId(buffer);
+	cout<<"age: "<< ticket.age << '\n';
+
+
+
+
+
+	return console;
+}

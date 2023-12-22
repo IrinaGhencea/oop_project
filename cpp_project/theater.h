@@ -222,7 +222,7 @@ public:
             cout << "PLay's name is " << this->name<<'\n';
 
         }
-        cout << "The number of seats is " << this->numberSeat << " and the number of rows is " << this->numberRow<<"\n";
+        
 
     }
 
@@ -239,13 +239,7 @@ public:
         }
         cout << " the number of seats that have already been occupied is " << this->occupiedSeats << "\n";
 
-        if (this->occupiedRows != nullptr)
-        {
-            for (int i = 0; i < this->numberRow; i++)
-            {
-                cout << " and the number of rows that have already been occupied is " << this->occupiedRows[i] <<"out of "<<this->numberRow<<"\n";
-            }
-        }
+      
 
     }
 
@@ -337,42 +331,10 @@ public:
 
 
     friend istream& operator>>(istream& console, Theater& play);
-    friend ostream& operator<<(ostream& console, const Theater& play);
+    friend ostream& operator<<(ostream& console, const Theater play);
 
 
-    //<<operator
-    friend ostream& operator<<(ostream& console, const Theater& play) {
-
-
-        if (play.name != nullptr) {
-
-            console << "The play is " << play.name << '\n';
-        }
-        console << "The number of seats that have been occupied is: " << play.numberSeat << '\n';
-        console << "The number of rows that have been occupied is: " << play.numberRow << '\n';
-
-        return console;
-    }
-
-    //>> operator
-    friend istream& operator>>(istream& console, Theater& play) {
-        cout << endl << "Play's name is: "<<"\n";
-        char buffer[100];
-        console.getline(buffer, 100);
-        console.clear();
-
-        play.setName(buffer);
-
-        cout << "The number of occupied seats: ";
-        console >> play.numberSeat;
-
-        cout << "The number of occupied rows: ";
-        console >> play.numberRow;
-
-        return console;
-
-
-    }
+    
 
    
 
@@ -383,6 +345,145 @@ int Theater::min_number_seats = 15;
 int Theater::max_number_seats = 350;
 
 
+//<<operator
+ ostream& operator<<(ostream& console, const Theater play) {
 
+
+    if (play.name != nullptr) {
+
+        console << "The play is " << play.name << '\n';
+    }
+    console << "The number of seats that have been occupied is: " << play.numberSeat << '\n';
+
+
+    return console;
+}
+
+//>> operator
+istream& operator>>(istream& console, Theater& play) {
+    cout << endl << "Play's name is: " << "\n";
+    char buffer[100];
+    console.getline(buffer, 100);
+    console.clear();
+
+    play.setName(buffer);
+
+    cout << "The number of occupied seats: " << '\n';
+    console >> play.numberSeat;
+
+
+    return console;
+
+
+}
+
+//class created by deriving an existing class
+
+class Cinema : public Theater {
+private:
+    string* movies; 
+    int numMovies;
+
+public:
+    // constructor
+
+    Cinema() : Theater() {
+        this->movies = nullptr;
+        this->numMovies = 0;
+
+    }
+
+    Cinema(const char* name, int occupiedSeats, int numberRow, int* occupiedRows, const string* movies, int numMovies)
+        : Theater(name, occupiedSeats, numberRow, occupiedRows) {
+
+        if (movies != nullptr)
+        {
+            this->movies = new string[numMovies];
+            for (int i = 0; i < numMovies; i++)
+            {
+                this->movies[i] = movies[i];
+            }
+        }
+        else
+        {
+            this->movies = nullptr;
+        }
+
+        this->numMovies = numMovies;
+    }
+
+    // destructor
+    ~Cinema() {
+        if(this->movies!=nullptr)
+        delete[] this->movies;
+    }
+
+    // getters
+    string* getMovies() const {
+        string* copy;
+        if (this->movies != nullptr)
+        {
+            copy = new string[this->numMovies];
+            for (int i = 0; i < this->numMovies; i++)
+            {
+                copy[i] = this->movies[i];
+            }
+        }
+        else
+        {
+            copy = nullptr;
+        }
+
+        return copy;
+    }
+
+    void setMovies(const string* movies) {
+        if (this->movies != nullptr) {
+            delete[] this->movies;
+        }
+        if (movies != nullptr)
+        {
+            this->movies = new string[this->numMovies];
+            for (int i = 0; i < this->numMovies; i++)
+            {
+                this->movies[i] = movies[i];
+            }
+        }
+        else
+        {
+            this->movies = nullptr;
+        }
+
+    }
+
+
+    friend ostream& operator<<(ostream&, Cinema);
+    friend istream& operator>>(istream&, Cinema&);
+    
+};
+
+
+
+
+//ostream& operator<<(ostream& console, Cinema c)
+//{
+//    
+//    console << (Theater)c << '\n';
+//
+//    console <<"Number of movies: " << c.numMovies;
+//
+//    return console;
+//}
+//
+//
+//istream& operator>>(istream& console, Cinema& c)
+//{
+//    cout << "Number of movies: ";
+//     
+//        console >> c.numMovies;
+//    
+//
+//    return console;
+//}
 
 
