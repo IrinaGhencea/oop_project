@@ -3,6 +3,7 @@
 #include "ticket.h"
 #include "theater.h"
 #include "game.h"
+#include <fstream>
 
 using namespace std;
 
@@ -40,6 +41,14 @@ int main() {
     cin >> g;
 
     cout << g;
+
+    ofstream f1("game.txt");
+    f1 << g1;
+    f1.close();
+
+    ifstream f2("game.txt");
+    f2 >> g2;
+
   
     //theater
     char name1[] = "play1";
@@ -77,9 +86,9 @@ int main() {
     cout << t;
 
     //cinema
-    string movies[]{ "Spiderman1","Iron Man", "Thor" };
+    string movies[]{ "Spiderman1", "Iron Man", "Thor" };
 
-    Cinema c(name1, 67, 90, i, movies, 3);
+    Cinema c(name1, 67, 3, i, movies, 3);
 
     /*cin >> c;
     cout << c;*/

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 class Theater {
@@ -31,6 +32,8 @@ public:
 
     //1st constructor with parameters
     Theater(const char* name, int numberSeat, int numberRow) {
+        this->occupiedRows = nullptr;
+        this->occupiedSeats = 0;
         this->numberSeat = numberSeat;
         this->numberRow = numberRow;
         if (name != nullptr && strlen(name) < 15) {
@@ -56,6 +59,7 @@ public:
 
         this->occupiedSeats= occupiedSeats;
         this -> numberRow = numberRow;
+        this->numberSeat = 0;
 
         if (name != nullptr && strlen(name) < 15) {
             this->name = new char[strlen(name) + 1];
@@ -71,7 +75,6 @@ public:
         this->numberSeat = play.numberSeat;
         this->numberRow = play.numberRow;
         this->occupiedSeats = play.occupiedSeats;
-        this->occupiedRows = play.occupiedRows;
         if (play.name != nullptr) {
             this->name = new char[strlen(play.name) + 1];
             strcpy(this->name, play.name);
@@ -79,6 +82,16 @@ public:
         else {
             this->name = nullptr;
         }
+        if (play.occupiedRows != nullptr)
+        {
+            this->occupiedRows = new int[this->numberRow];
+            for (int i = 0; i < this->numberRow; i++)
+            {
+                this->occupiedRows[i] = play.occupiedRows[i];
+            }
+
+        }
+
     }
 
     // destructor
@@ -87,6 +100,8 @@ public:
             delete[] this->occupiedRows;
         }
         delete[] this->name;
+
+
     }
 
   
@@ -330,8 +345,60 @@ public:
     }
 
 
-    friend istream& operator>>(istream& console, Theater& play);
-    friend ostream& operator<<(ostream& console, const Theater play);
+    void saveInBfile() {
+        ofstream f("theater.bin", std::ios::out | std::ios::binary);
+
+        if (f.is_open()) {
+            unsigned length = strlen(name);
+            f.write((char*)&length, sizeof(length));
+            f.write(name, length + 1);
+            f.write((char*)&numberSeat, sizeof(numberSeat));
+            f.write((char*)&numberRow, sizeof(numberRow));
+            f.write((char*)&occupiedSeats, sizeof(occupiedSeats));
+
+            if (occupiedRows != nullptr) {
+
+                for (int i = 0; i < numberRow; i++) {
+                    f.write((char*)&occupiedRows[i], sizeof(occupiedRows[i]));
+                }
+            }
+            f.close();
+        }
+    }
+
+    void readFromBfile() {
+
+        ifstream f("theater.bin", std::ios::in | std::ios::binary);
+
+
+        if (f.is_open()) {
+            unsigned length = 0;
+            f.read((char*)&length, sizeof(length));
+            char* n = new char[length + 1];
+            f.read(n, length + 1);
+            name = n;
+            delete[] n;
+            f.read((char*)&numberSeat, sizeof(numberSeat));
+            f.read((char*)&numberRow, sizeof(numberRow));
+            f.read((char*)&occupiedSeats, sizeof(occupiedSeats));
+
+            if (occupiedRows != nullptr) {
+                for (int i = 0; i < numberRow; i++) {
+                    f.read((char*)&occupiedRows[i], sizeof(occupiedRows[i]));
+                }
+            }
+            f.close();
+        }
+    }
+
+
+
+    friend istream& operator>>(istream& console, Theater& );
+    friend ostream& operator<<(ostream& console, const Theater );
+
+    friend ofstream& operator<<(std::ofstream& fout, const Theater& );
+    friend ifstream& operator>>(std::ifstream& fin, Theater&);
+
 
 
     
@@ -376,6 +443,40 @@ istream& operator>>(istream& console, Theater& play) {
 
 
 }
+
+ofstream& operator<<(std::ofstream& fout, const Theater& play) {
+    unsigned length = strlen(play.name);
+    fout.write((char*)&length, sizeof(length));
+    fout.write(play.name, length + 1);
+    fout.write((char*)&play.numberSeat, sizeof(play.numberSeat));
+    fout.write((char*)&play.numberRow, sizeof(play.numberRow));
+    fout.write((char*)&play.occupiedSeats, sizeof(play.occupiedSeats));
+    if (play.occupiedRows != nullptr) {
+        for (int i = 0; i < play.numberRow; i++) {
+            fout.write((char*)&play.occupiedRows[i], sizeof(play.occupiedRows[i]));
+        }
+    }
+    return fout;
+}
+
+ifstream& operator>>(std::ifstream& fin, Theater& play) {
+    unsigned length = 0;
+    fin.read((char*)&length, sizeof(length));
+    char* n = new char[length + 1];
+    fin.read(n, length + 1);
+    play.name = n;
+    delete[] n;
+    fin.read((char*)&play.numberSeat, sizeof(play.numberSeat));
+    fin.read((char*)&play.numberRow, sizeof(play.numberRow));
+    fin.read((char*)&play.occupiedSeats, sizeof(play.occupiedSeats));
+    if (play.occupiedRows != nullptr) {
+        for (int i = 0; i < play.numberRow; i++) {
+            fin.read((char*)&play.occupiedRows[i], sizeof(play.occupiedRows[i]));
+        }
+    }
+    return fin;
+}
+
 
 //class created by deriving an existing class
 
@@ -465,25 +566,25 @@ public:
 
 
 
-//ostream& operator<<(ostream& console, Cinema c)
-//{
-//    
-//    console << (Theater)c << '\n';
-//
-//    console <<"Number of movies: " << c.numMovies;
-//
-//    return console;
-//}
-//
-//
-//istream& operator>>(istream& console, Cinema& c)
-//{
-//    cout << "Number of movies: ";
-//     
-//        console >> c.numMovies;
-//    
-//
-//    return console;
-//}
+ostream& operator<<(ostream& console, Cinema c)
+{
+    
+    console << (Theater)c << '\n';
+
+    console <<"Number of movies: " << c.numMovies;
+
+    return console;
+}
+
+
+istream& operator>>(istream& console, Cinema& c)
+{
+    cout << "Number of movies: ";
+     
+        console >> c.numMovies;
+    
+
+    return console;
+}
 
 

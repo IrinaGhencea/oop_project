@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -69,6 +70,7 @@ public:
         }
 
         this->duration = duration;
+        this->age = 0;
     }
     
 
@@ -308,10 +310,41 @@ public:
         else return false;
     }
 
+
+    void saveInBfile() {
+        ofstream fout("game.bin", ios::out | ios::binary);
+       
+        unsigned length = strlen(name);
+        fout.write((char*)&length, sizeof(length));
+        fout.write(name, length + 1);
+        fout.write((char*)&duration, sizeof(duration));
+        fout.write((char*)&minAge, sizeof(minAge));
+
+        fout.close();
+    }
+
+    void readFromBfile() {
+        ifstream fin("game.bin", ios::in | ios::binary);
+
+        unsigned length = 0;
+        fin.read((char*)&length, sizeof(length));
+        char* n = new char[length + 1];
+        fin.read(n, length + 1);
+
+        name = n;
+        delete[] n;
+        fin.read((char*)&duration, sizeof(duration));
+        fin.read((char*)&minAge, sizeof(minAge));
+
+        fin.close();
+    }
+
    
     friend istream& operator>>(istream& console, Game&);
     friend ostream& operator<<(ostream& console, const Game );
 
+    friend ofstream& operator<<(ofstream& fout, const Game&);
+    friend ifstream& operator>>(ifstream& fin, Game&);
 
    
 
@@ -366,4 +399,23 @@ istream& operator>>(istream& console, Game& game) {
 
 }
 
+ofstream& operator<<(ofstream& fout, const Game& g) {
+    fout.write(g.name, strlen(g.name) + 1);
+    fout.write((char*)&g.duration, sizeof(g.duration));
+    fout.write((char*)&g.minAge, sizeof(g.minAge));
+    return fout;
+}
+
+
+ ifstream& operator>>(ifstream& fin, Game& g) {
+    unsigned length = 0;
+    fin.read((char*)&length, sizeof(length));
+    char* n = new char[length + 1];
+    fin.read(n, length + 1);
+    g.name = n;
+    delete[] n;
+    fin.read((char*)&g.duration, sizeof(g.duration));
+    fin.read((char*)&g.minAge, sizeof(g.minAge));
+    return fin;
+}
 
