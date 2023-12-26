@@ -85,6 +85,13 @@ int main() {
 
     cout << t;
 
+    ofstream f3("theater.txt");
+    f3 << t;
+    f3.close();
+
+    ifstream f4("theater.txt");
+    f4 >> t;
+
     //cinema
     string movies[]{ "Spiderman1", "Iron Man", "Thor" };
 
@@ -129,5 +136,18 @@ int main() {
     cout << t2;
     
 
+    ofstream f5("ticket.txt");
+    f5 << t4;
+    f5.close();
+
+    ifstream f6("ticket.txt");
+    f6 >> t4;
+
+
+    ArtisticEventInfo artisticEvent;
+    SportsEventInfo sportsEvent;
+
+    artisticEvent.displayEventType();
+    sportsEvent.displayEventType();
   
 }

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-enum eventType { THEATER, SPORT };
+
 
 class Ticket {
 private:
@@ -15,7 +15,7 @@ private:
 	string personName;
 	int age; //statically defined array of numbers
     const string company;
-	eventType type = SPORT;
+	
 
 	static int discount;
 	
@@ -23,7 +23,7 @@ public:
 
 
 	//default constructor
-	Ticket(): company("iaBilet"), type(SPORT) {
+	Ticket(): company("iaBilet") {
 		this->price = nullptr;
 		this->id = nullptr;
 		this->personName = "";
@@ -35,7 +35,7 @@ public:
 
 
 	//1st constructor with parameters
-	Ticket(string company, string personName, char* id) :company(company), type(SPORT)
+	Ticket(string company, string personName, char* id) :company(company)
 	{   
 		this->personName = personName;
 		if (id != nullptr) {
@@ -46,7 +46,7 @@ public:
 
 
 	//2nd constructor with parameters
-	Ticket(int* price, string personName,string company, int age, int maximumPrice, char* id) : company(company), type(SPORT)
+	Ticket(int* price, string personName,string company, int age, int maximumPrice, char* id) : company(company)
 	{
 		if (price != nullptr)
 		{
@@ -78,7 +78,7 @@ public:
 
 
 	//copy constructor 
-	Ticket(const Ticket& ticket) : company(ticket.company), type(SPORT) {
+	Ticket(const Ticket& ticket) : company(ticket.company) {
 		this->personName = ticket.personName;
 		this->age = ticket.age;
 		this->maximumPrice = ticket.maximumPrice;
@@ -121,22 +121,7 @@ public:
 		}
 	}
 
-	//proccesing the event
 
-
-
-	void event() {
-		switch (type) {
-
-		case THEATER: cout << "You are buying a ticket for a theater play " << endl;
-			break;
-		case SPORT: cout << "You are buying a ticket for a sport match " << endl;
-			break;
-		}
-
-
-
-	}
 
 	//getter Price
 	int* getPrice()
@@ -341,7 +326,7 @@ public:
 			for (int i = 0; i < this->maximumPrice; i++)
 			{
 				cout << "The price for this ticket is " << this->price[i] << '\n';
-				cout<< " The maximum price for this event is " << this->maximumPrice << '\n';
+				cout<< " The maximum number of tickets for this event is " << this->maximumPrice << '\n';
 			}
 		}
 	}
@@ -384,10 +369,41 @@ public:
 			return false;
 	}
 
+
+	void saveInBfile() {
+		ofstream fout("ticket.bin", ios::out | ios::binary);
+
+		unsigned length = strlen(id);
+		fout.write((char*)&length, sizeof(length));
+		fout.write(id, length + 1);
+		fout.write((char*)&age, sizeof(age));
+		fout.write((char*)&maximumPrice, sizeof(maximumPrice));
+
+		fout.close();
+	}
 	
+
+	void readFromBfile() {
+		ifstream fin("ticket.bin", ios::in | ios::binary);
+
+		unsigned length = 0;
+		fin.read((char*)&length, sizeof(length));
+		char* n = new char[length + 1];
+		fin.read(n, length + 1);
+
+		id = n;
+		delete[] n;
+		fin.read((char*)&age, sizeof(age));
+		fin.read((char*)&maximumPrice, sizeof(maximumPrice));
+
+		fin.close();
+	}
 
 	friend istream& operator>>(istream& console, Ticket& ticket);
 	friend ostream& operator<<(ostream& console, const Ticket ticket);
+
+	friend ofstream& operator<<(ofstream& fout, const Ticket& ticket);
+	friend  ifstream& operator>>(std::ifstream& fin, Ticket& ticket);
 	
 	
 
@@ -432,3 +448,49 @@ ostream& operator<<(ostream& console, const Ticket ticket)
 
 	return console;
 }
+
+ ofstream& operator<<(ofstream& fout, const Ticket& ticket) {
+	 unsigned length = strlen(ticket.id);
+	 fout.write((char*)&length, sizeof(length));
+	 fout.write(ticket.id, length + 1);
+	 fout.write((char*)&ticket.age, sizeof(ticket.age));
+	 fout.write((char*)&ticket.maximumPrice, sizeof(ticket.maximumPrice));
+	 return fout;
+ }
+
+ ifstream& operator>>(std::ifstream& fin, Ticket& ticket) {
+	 unsigned length = 0;
+	 fin.read((char*)&length, sizeof(length));
+	 char* n = new char[length + 1];
+	 fin.read(n, length + 1);
+	 ticket.id = n;
+	 delete[] n;
+	 fin.read((char*)&ticket.age, sizeof(ticket.age));
+	 fin.read((char*)&ticket.maximumPrice, sizeof(ticket.maximumPrice));
+	 return fin;
+ }
+
+
+ class EventInfo {
+ public:
+	 virtual void displayEventType() const = 0;
+
+	 virtual ~EventInfo() {}
+ };
+
+ class ArtisticEventInfo : public EventInfo {
+ public:
+	
+	 void displayEventType() const override {
+		 cout << "This is a concert or a movie." << "\n";
+	 }
+ };
+
+ 
+ class SportsEventInfo : public EventInfo {
+ public:
+	
+	 void displayEventType() const override {
+		 cout << "This is a sports event." << "\n";
+	 }
+ };

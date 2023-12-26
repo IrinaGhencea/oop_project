@@ -444,7 +444,7 @@ istream& operator>>(istream& console, Theater& play) {
 
 }
 
-ofstream& operator<<(std::ofstream& fout, const Theater& play) {
+ofstream& operator<<(ofstream& fout, const Theater& play) {
     unsigned length = strlen(play.name);
     fout.write((char*)&length, sizeof(length));
     fout.write(play.name, length + 1);
