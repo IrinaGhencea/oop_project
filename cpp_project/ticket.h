@@ -10,8 +10,8 @@ using namespace std;
 class Ticket {
 private:
 	int* price; //dynamically defined array of numbers
-	int maximumPrice;
-	char* id; //dynamically defined array of characters
+	int maximumNumber;
+	string id; 
 	string personName;
 	int age; //statically defined array of numbers
     const string company;
@@ -25,8 +25,10 @@ public:
 	//default constructor
 	Ticket(): company("iaBilet") {
 		this->price = nullptr;
-		this->id = nullptr;
+		this->id = "";
 		this->personName = "";
+		this->age = 0;
+		this->maximumNumber = 0;
 		
 
 
@@ -35,23 +37,20 @@ public:
 
 
 	//1st constructor with parameters
-	Ticket(string company, string personName, char* id) :company(company)
+	Ticket(string company, string personName, string id) :company(company)
 	{   
 		this->personName = personName;
-		if (id != nullptr) {
-			this->id = new char[strlen(id) + 1];
-			strcpy(this->id, id);
-		}
+		this->id = id;
 	}
 
 
 	//2nd constructor with parameters
-	Ticket(int* price, string personName,string company, int age, int maximumPrice, char* id) : company(company)
+	Ticket(int* price, string personName,string company, int age, int maximumNumber, string id) : company(company)
 	{
 		if (price != nullptr)
 		{
-			this->price= new int[maximumPrice];
-			for (int i = 0; i < maximumPrice; i++)
+			this->price= new int[maximumNumber];
+			for (int i = 0; i < maximumNumber; i++)
 			{
 				this->price[i] = price[i];
 			}
@@ -62,13 +61,10 @@ public:
 		}
 
 		this->age = age;
-		this->maximumPrice = maximumPrice;
+		this->maximumNumber = maximumNumber;
 		this->personName = personName;
 
-		if (id != nullptr) {
-			this->id = new char[strlen(id) + 1];
-			strcpy(this->id, id);
-		}
+		this->id = id;
 		price++;
 	}
 
@@ -81,24 +77,17 @@ public:
 	Ticket(const Ticket& ticket) : company(ticket.company) {
 		this->personName = ticket.personName;
 		this->age = ticket.age;
-		this->maximumPrice = ticket.maximumPrice;
+		this->maximumNumber = ticket.maximumNumber;
+		this->id = ticket.id;
 		
 
 		if (ticket.price != nullptr) {
-			this->price = new int[this->maximumPrice];
-			for (int i = 0; i < this->maximumPrice; i++) {
+			this->price = new int[this->maximumNumber];
+			for (int i = 0; i < this->maximumNumber; i++) {
 				this->price[i] = ticket.price[i];
 			}
 		}
-		if (ticket.id != nullptr)
-		{
-			this->id = new char[strlen(ticket.id) + 1];
-			strcpy(this->id, ticket.id);
-		}
-		else
-		{
-			this->id = nullptr;
-		}
+		
 	}
 
 		
@@ -115,10 +104,7 @@ public:
 			delete[] this->price;
 		}
 
-		if (this->id != nullptr)
-		{
-			delete[] this->id;
-		}
+	
 	}
 
 
@@ -129,8 +115,8 @@ public:
 		int* copy;
 		if (this->price != nullptr)
 		{
-			copy = new int[this->maximumPrice];
-			for (int i = 0; i < this->maximumPrice; i++)
+			copy = new int[this->maximumNumber];
+			for (int i = 0; i < this->maximumNumber; i++)
 			{
 				copy[i] = this->price[i];
 			}
@@ -149,8 +135,8 @@ public:
 	{
 		if (price != nullptr)
 		{
-			this->price = new int[this->maximumPrice];
-			for (int i = 0; i < this->maximumPrice; i++)
+			this->price = new int[this->maximumNumber];
+			for (int i = 0; i < this->maximumNumber; i++)
 			{
 				this->price[i] = price[i];
 			}
@@ -163,30 +149,16 @@ public:
 
 	//getter Id
 
-	char* getId()
+	string getId()
 	{
-		char* copy = new char[strlen(this->id) + 1];
-		strcpy(copy, this->id);
-		return copy;
+		return this->id;
 	}
 
 	//setter Id
 
-	void setId(const char* id)
+	void setId(string id)
 	{
-		if (id != nullptr)
-		{
-			if (this->id != nullptr)
-			{
-				delete[] this->id;
-			}
-			this->id = new char[strlen(id) + 1];
-			strcpy(this->id, id);
-		}
-		else
-		{
-			throw ("invalid id");
-		}
+		this->id = id;
 	}
 
 	//getter Age
@@ -215,18 +187,18 @@ public:
 
 	//getter Maximum Price
 
-	int getMaximumPrice()
+	int getmaximumNumber()
 	{
-		return this->maximumPrice;
+		return this->maximumNumber;
 	}
 
 	//setter Maximum Price
 
-	void setMaximumPrice(int maximumPrice)
+	void setmaximumNumber(int maximumNumber)
 	{
-		if (maximumPrice > 0)
+		if (maximumNumber > 0)
 		{
-			this->maximumPrice = maximumPrice;
+			this->maximumNumber = maximumNumber;
 		}
 		else
 		{
@@ -273,12 +245,13 @@ public:
 			
 			this->age = ticket.age;
 			this->personName = ticket.personName;
-			this->maximumPrice = ticket.maximumPrice;
+			this->maximumNumber = ticket.maximumNumber;
+			this->id = ticket.id;
 
 			if (ticket.price != nullptr)
 			{
-				this->price = new int[ticket.maximumPrice];
-				for (int i = 0; i < this->maximumPrice; i++)
+				this->price = new int[ticket.maximumNumber];
+				for (int i = 0; i < this->maximumNumber; i++)
 				{
 					this->price[i] = ticket.price[i];
 				}
@@ -289,16 +262,7 @@ public:
 			}
 
 
-			if (this->id!= nullptr) {
-				delete[] this->id;
-			}
-			if (ticket.id != nullptr) {
-				this->id = new char[strlen(ticket.id) + 1];
-				strcpy(this->id, ticket.id);
-			}
-			else {
-				this->id = nullptr;
-			}
+			
 		}
 		return *this;
 	}
@@ -314,29 +278,37 @@ public:
 	{
 		cout << "This event will be provided by the company: " << this->company << "\n";
 
-		if (this->id != nullptr)
-		{
+		
 			
 			
-				cout << "Your id is " << this->id<<" associated with the name "<<this->personName<<"\n";
+	    cout << "Your id is " << this->id<<" associated with the name "<<this->personName<<"\n";
 			
-		}
+		
 		if (this->price != nullptr)
 		{
-			for (int i = 0; i < this->maximumPrice; i++)
+			for (int i = 0; i < this->maximumNumber; i++)
 			{
 				cout << "The price for this ticket is " << this->price[i] << '\n';
-				cout<< " The maximum number of tickets for this event is " << this->maximumPrice << '\n';
+				cout<< " The maximum number of tickets for this event is " << this->maximumNumber << '\n';
 			}
 		}
+	}
+
+	int priceWithDiscount(int age) {
+		
+		if (age < 14) {
+			price[0] = price[0] - Ticket::discount;
+			
+		}
+		return price[0];
 	}
 
 	//[] operator
 	int operator[](int index)
 	{
-		if (id != 0 && index >= 0 && index < strlen(this->id) + 1)
+		if (price != nullptr && index >= 0 )
 		{
-			return id[index];
+			return price[index];
 		}
 		else throw exception("invalid index");
 	}
@@ -363,7 +335,7 @@ public:
 
 	//== operator 
 	bool operator==(const Ticket& ticket) {
-		if (this->maximumPrice == ticket.maximumPrice && this->price == ticket.price && strcmp(this->id, ticket.id) == 0)
+		if (this->maximumNumber == ticket.maximumNumber && this->price == ticket.price)
 			return true;
 		else
 			return false;
@@ -371,39 +343,42 @@ public:
 
 
 	void saveInBfile() {
-		ofstream fout("ticket.bin", ios::out | ios::binary);
+		ofstream f("Ticket.bin", ios::out | ios::binary);
+		
 
-		unsigned length = strlen(id);
-		fout.write((char*)&length, sizeof(length));
-		fout.write(id, length + 1);
-		fout.write((char*)&age, sizeof(age));
-		fout.write((char*)&maximumPrice, sizeof(maximumPrice));
+			unsigned length = personName.length();
+			const char* ca = personName.c_str();
 
-		fout.close();
+			f.write((char*)&length, sizeof(length));
+			f.write(ca, length + 1);
+			
+
+			
+
+			f.close();
+		
 	}
-	
+
 
 	void readFromBfile() {
-		ifstream fin("ticket.bin", ios::in | ios::binary);
-
+		ifstream f("Ticket.bin", ios::in | ios::binary);
+		
 		unsigned length = 0;
-		fin.read((char*)&length, sizeof(length));
+		f.read((char*)&length, sizeof(length));
 		char* n = new char[length + 1];
-		fin.read(n, length + 1);
-
-		id = n;
+		f.read(n, length + 1);
+		personName = n;
 		delete[] n;
-		fin.read((char*)&age, sizeof(age));
-		fin.read((char*)&maximumPrice, sizeof(maximumPrice));
-
-		fin.close();
+		
+		
 	}
+
+	
 
 	friend istream& operator>>(istream& console, Ticket& ticket);
 	friend ostream& operator<<(ostream& console, const Ticket ticket);
-
 	friend ofstream& operator<<(ofstream& fout, const Ticket& ticket);
-	friend  ifstream& operator>>(std::ifstream& fin, Ticket& ticket);
+	friend ifstream& operator>>(ifstream& fin, Ticket& ticket);
 	
 	
 
@@ -414,10 +389,10 @@ public:
 
 // initializing static variables
 
-int Ticket::discount = 25;
+int Ticket::discount = 5;
 
 
-// << operator
+//<< operator 
 ostream& operator<<(ostream& console, const Ticket ticket)
 {
 	console << " Person name:" << ticket.personName << "\n";
@@ -427,9 +402,8 @@ ostream& operator<<(ostream& console, const Ticket ticket)
 	return console;
 }
 
-
 // >> operator 
- istream& operator>>(istream& console, Ticket& ticket) {
+istream& operator>>(istream& console, Ticket& ticket) {
 	cout << "Person name:" << '\n';
 	console >> ticket.personName;
 
@@ -440,7 +414,7 @@ ostream& operator<<(ostream& console, const Ticket ticket)
 	console.getline(buffer, 100);
 	console.clear();
 	ticket.setId(buffer);
-	cout<<"age: "<< ticket.age << '\n';
+	cout << "age: " << ticket.age << '\n';
 
 
 
@@ -449,48 +423,41 @@ ostream& operator<<(ostream& console, const Ticket ticket)
 	return console;
 }
 
- ofstream& operator<<(ofstream& fout, const Ticket& ticket) {
-	 unsigned length = strlen(ticket.id);
-	 fout.write((char*)&length, sizeof(length));
-	 fout.write(ticket.id, length + 1);
-	 fout.write((char*)&ticket.age, sizeof(ticket.age));
-	 fout.write((char*)&ticket.maximumPrice, sizeof(ticket.maximumPrice));
-	 return fout;
- }
-
- ifstream& operator>>(std::ifstream& fin, Ticket& ticket) {
-	 unsigned length = 0;
-	 fin.read((char*)&length, sizeof(length));
-	 char* n = new char[length + 1];
-	 fin.read(n, length + 1);
-	 ticket.id = n;
-	 delete[] n;
-	 fin.read((char*)&ticket.age, sizeof(ticket.age));
-	 fin.read((char*)&ticket.maximumPrice, sizeof(ticket.maximumPrice));
-	 return fin;
- }
 
 
- class EventInfo {
+
+ofstream& operator<<(ofstream& fout, const Ticket& ticket) {
+	fout << ticket.personName << endl;
+
+	return fout;
+}
+
+ifstream& operator>>(ifstream& fin, Ticket& ticket) {
+	getline(fin, ticket.personName);
+	return fin;
+}
+
+
+ class EventInformation {
  public:
-	 virtual void displayEventType() const = 0;
+	 virtual void showEventCategory() const = 0;
 
-	 virtual ~EventInfo() {}
+	 virtual ~EventInformation() {}
  };
 
- class ArtisticEventInfo : public EventInfo {
+ class ArtisticEventInformation : public EventInformation {
  public:
 	
-	 void displayEventType() const override {
-		 cout << "This is a concert or a movie." << "\n";
+	 void showEventCategory() const override {
+		 cout << "You can buy a ticket for a concert or a movie here." << "\n";
 	 }
  };
 
  
- class SportsEventInfo : public EventInfo {
+ class SportsEventInformation : public EventInformation {
  public:
 	
-	 void displayEventType() const override {
-		 cout << "This is a sports event." << "\n";
+	 void showEventCategory() const override {
+		 cout << "You can buy a ticket for a sports event here." << "\n";
 	 }
  };

@@ -311,32 +311,30 @@ public:
     }
 
 
-    void saveInBfile() {
-        ofstream fout("game.bin", ios::out | ios::binary);
-       
-        unsigned length = strlen(name);
-        fout.write((char*)&length, sizeof(length));
-        fout.write(name, length + 1);
-        fout.write((char*)&duration, sizeof(duration));
-        fout.write((char*)&minAge, sizeof(minAge));
+    void saveInBfileg() {
+        ofstream f("Game.bin", ios::out | ios::binary);
 
-        fout.close();
+        unsigned length = teams.length();
+        const char* ca = teams.c_str(); 
+
+        f.write((char*)&length, sizeof(length));
+        f.write(ca, length + 1);
+
+        
+
+        f.close();
     }
 
-    void readFromBfile() {
-        ifstream fin("game.bin", ios::in | ios::binary);
+    void readFromBfileg() {
+        ifstream f("Game.bin", ios::in | ios::binary);
 
         unsigned length = 0;
-        fin.read((char*)&length, sizeof(length));
+        f.read((char*)&length, sizeof(length));
         char* n = new char[length + 1];
-        fin.read(n, length + 1);
-
-        name = n;
+        f.read(n, length + 1);
+        teams = n;
         delete[] n;
-        fin.read((char*)&duration, sizeof(duration));
-        fin.read((char*)&minAge, sizeof(minAge));
-
-        fin.close();
+       
     }
 
    
@@ -365,7 +363,7 @@ int Game::extra = 15;
 
         console << "Game's name is : " << game.name << '\n';
     }
-    console << "Your age :"<<'\n';
+    console << "Your age :"<<game.age<<'\n';
     console << "Your seat is : " << game.seat << '\n';
    
 
@@ -400,22 +398,17 @@ istream& operator>>(istream& console, Game& game) {
 }
 
 ofstream& operator<<(ofstream& fout, const Game& g) {
-    fout.write(g.name, strlen(g.name) + 1);
-    fout.write((char*)&g.duration, sizeof(g.duration));
-    fout.write((char*)&g.minAge, sizeof(g.minAge));
+    fout << g.teams << endl;
+   
+
     return fout;
 }
 
 
  ifstream& operator>>(ifstream& fin, Game& g) {
-    unsigned length = 0;
-    fin.read((char*)&length, sizeof(length));
-    char* n = new char[length + 1];
-    fin.read(n, length + 1);
-    g.name = n;
-    delete[] n;
-    fin.read((char*)&g.duration, sizeof(g.duration));
-    fin.read((char*)&g.minAge, sizeof(g.minAge));
-    return fin;
+
+    
+     getline(fin, g.teams); 
+     return fin;
 }
 

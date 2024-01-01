@@ -7,7 +7,7 @@ using namespace std;
 
 class Theater {
 private:
-    char* name; //dynamically defined array
+    string name; 
     int numberSeat; //statically defined array of numbers
     int numberRow;
     int occupiedSeats;
@@ -25,28 +25,23 @@ public:
     Theater() {
         this->numberSeat = 0;
         this->numberRow = 0;
-        this->name = nullptr;
+        this->name = "";
         this->occupiedSeats = 0;
         this->occupiedRows = nullptr;
     }
 
     //1st constructor with parameters
-    Theater(const char* name, int numberSeat, int numberRow) {
+    Theater( string name, int numberSeat, int numberRow) {
         this->occupiedRows = nullptr;
         this->occupiedSeats = 0;
         this->numberSeat = numberSeat;
         this->numberRow = numberRow;
-        if (name != nullptr && strlen(name) < 15) {
-            this->name = new char[strlen(name) + 1];
-            strcpy(this->name, name);
-        }
-        else {
-            this->name = nullptr;
-        }
+        this->name = name;
+        
     }
 
     //2nd constructor with parameters
-    Theater(const char* name, int occupiedSeats,int numberRow, int* occupiedRows) {
+    Theater(string name, int occupiedSeats,int numberRow, int* occupiedRows) {
         if (occupiedRows != nullptr) {
             this->occupiedRows = new int[numberRow];
             for (int i = 0; i < numberRow; i++) {
@@ -60,14 +55,8 @@ public:
         this->occupiedSeats= occupiedSeats;
         this -> numberRow = numberRow;
         this->numberSeat = 0;
-
-        if (name != nullptr && strlen(name) < 15) {
-            this->name = new char[strlen(name) + 1];
-            strcpy(this->name, name);
-        }
-        else {
-            this->name = nullptr;
-        }
+        this->name = name;
+        
     }
 
     // copy constructor
@@ -75,13 +64,8 @@ public:
         this->numberSeat = play.numberSeat;
         this->numberRow = play.numberRow;
         this->occupiedSeats = play.occupiedSeats;
-        if (play.name != nullptr) {
-            this->name = new char[strlen(play.name) + 1];
-            strcpy(this->name, play.name);
-        }
-        else {
-            this->name = nullptr;
-        }
+        this->name = play.name;
+
         if (play.occupiedRows != nullptr)
         {
             this->occupiedRows = new int[this->numberRow];
@@ -99,7 +83,7 @@ public:
         if (occupiedRows != nullptr) {
             delete[] this->occupiedRows;
         }
-        delete[] this->name;
+       
 
 
     }
@@ -113,15 +97,8 @@ public:
         return this->numberRow;
     }
 
-    char* getName() {
-        if (this->name != nullptr) {
-            char* copy = new char[strlen(this->name) + 1];
-            strcpy(copy, this->name);
-            return copy;
-        }
-        else {
-            return nullptr;
-        }
+    string getName() {
+        return this->name;
     }
 
 
@@ -189,17 +166,9 @@ public:
         }
     }
 
-    void setName(const char* name) {
-        if (this->name != nullptr) {
-            delete[] this->name;
-        }
-        if (name != nullptr && strlen(name) < 15) {
-            this->name = new char[strlen(name) + 1];
-            strcpy(this->name, name);
-        }
-        else {
-            this->name = nullptr;
-        }
+    void setName(char name) {
+            this->name = name;
+        
     }
 
     static int getMinNumberSeats() {
@@ -230,13 +199,11 @@ public:
     void showCapacity()
     {
 
-        if (this->name != nullptr)
-        {
 
 
-            cout << "PLay's name is " << this->name<<'\n';
+            cout << "PLay/Movie's name is " << this->name<<'\n';
 
-        }
+        
         
 
     }
@@ -245,14 +212,12 @@ public:
     void showAvailability()
     {
 
-        if (this->name != nullptr)
-        {
+       
 
+        cout << "For the play/movie " << this->name<<"\n";
 
-            cout << "For the play " << this->name<<"\n";
-
-        }
-        cout << " the number of seats that have already been occupied is " << this->occupiedSeats << "\n";
+        
+        cout << " The number of seats that have already been occupied is " << this->occupiedSeats << "\n";
 
       
 
@@ -266,6 +231,7 @@ public:
             this->numberSeat = play.numberSeat;
             this->numberRow = play.numberRow;
             this->occupiedSeats = play.occupiedSeats;
+            this->name = play.name;
 
             if (this->occupiedRows != nullptr)
             {
@@ -285,16 +251,7 @@ public:
                 this->occupiedRows = nullptr;
             }
 
-            if (this->name != nullptr) {
-                delete[] this->name;
-            }
-            if (play.name != nullptr) {
-                this->name = new char[strlen(play.name) + 1];
-                strcpy(this->name, play.name);
-            }
-            else {
-                this->name = nullptr;
-            }
+
         }
         return *this;
     }
@@ -309,10 +266,10 @@ public:
 
 
     //++ operator-postincrement. It counts the number of rows that have been occupied
-    Theater operator++(int) {
+    Theater operator++(int ) {
 
         Theater copy = *this;
-        this->occupiedRows++;
+        this->occupiedSeats++;
         return copy;
 
     }
@@ -322,7 +279,7 @@ public:
 
     int operator[](int index) {
         if (occupiedRows != 0 && index >= 0 && index < numberRow) {
-            return true;
+            return occupiedRows[index];
         }
         else throw exception("invalid index");
     }
@@ -345,50 +302,32 @@ public:
     }
 
 
-    void saveInBfile() {
-        ofstream f("theater.bin", std::ios::out | std::ios::binary);
+    void saveInBfileth() {
 
-        if (f.is_open()) {
-            unsigned length = strlen(name);
-            f.write((char*)&length, sizeof(length));
-            f.write(name, length + 1);
-            f.write((char*)&numberSeat, sizeof(numberSeat));
-            f.write((char*)&numberRow, sizeof(numberRow));
-            f.write((char*)&occupiedSeats, sizeof(occupiedSeats));
+        ofstream f("Theater.bin", ios::out | ios::binary);
+        unsigned length = name.length();
+        const char* ca = name.c_str(); 
 
-            if (occupiedRows != nullptr) {
+        f.write((char*)&length, sizeof(length));
+        f.write(ca, length + 1);
 
-                for (int i = 0; i < numberRow; i++) {
-                    f.write((char*)&occupiedRows[i], sizeof(occupiedRows[i]));
-                }
-            }
-            f.close();
-        }
+        f.write((char*)&numberSeat, sizeof(numberSeat));
+
+        f.close();
+      
     }
 
-    void readFromBfile() {
+    void readFromBfileth() {
+        ifstream f("Theater.bin", ios::in | ios::binary);
 
-        ifstream f("theater.bin", std::ios::in | std::ios::binary);
 
-
-        if (f.is_open()) {
-            unsigned length = 0;
-            f.read((char*)&length, sizeof(length));
-            char* n = new char[length + 1];
-            f.read(n, length + 1);
-            name = n;
-            delete[] n;
-            f.read((char*)&numberSeat, sizeof(numberSeat));
-            f.read((char*)&numberRow, sizeof(numberRow));
-            f.read((char*)&occupiedSeats, sizeof(occupiedSeats));
-
-            if (occupiedRows != nullptr) {
-                for (int i = 0; i < numberRow; i++) {
-                    f.read((char*)&occupiedRows[i], sizeof(occupiedRows[i]));
-                }
-            }
-            f.close();
-        }
+        unsigned length = 0;
+        f.read((char*)&length, sizeof(length));
+        char* n = new char[length + 1];
+        f.read(n, length + 1);
+        name = n;
+        delete[] n;
+        f.read((char*)&numberSeat, sizeof(numberSeat));
     }
 
 
@@ -396,8 +335,8 @@ public:
     friend istream& operator>>(istream& console, Theater& );
     friend ostream& operator<<(ostream& console, const Theater );
 
-    friend ofstream& operator<<(std::ofstream& fout, const Theater& );
-    friend ifstream& operator>>(std::ifstream& fin, Theater&);
+    friend ofstream& operator<<(ofstream& fout, const Theater& );
+    friend ifstream& operator>>(ifstream& fin, Theater&);
 
 
 
@@ -416,10 +355,10 @@ int Theater::max_number_seats = 350;
  ostream& operator<<(ostream& console, const Theater play) {
 
 
-    if (play.name != nullptr) {
+  
 
-        console << "The play is " << play.name << '\n';
-    }
+    console << "The play/movies is " << play.name << '\n';
+    
     console << "The number of seats that have been occupied is: " << play.numberSeat << '\n';
 
 
@@ -428,12 +367,8 @@ int Theater::max_number_seats = 350;
 
 //>> operator
 istream& operator>>(istream& console, Theater& play) {
-    cout << endl << "Play's name is: " << "\n";
-    char buffer[100];
-    console.getline(buffer, 100);
-    console.clear();
-
-    play.setName(buffer);
+    cout << endl << "Play/Movies's name is: " << "\n";
+    console >> play.name;
 
     cout << "The number of occupied seats: " << '\n';
     console >> play.numberSeat;
@@ -445,36 +380,19 @@ istream& operator>>(istream& console, Theater& play) {
 }
 
 ofstream& operator<<(ofstream& fout, const Theater& play) {
-    unsigned length = strlen(play.name);
-    fout.write((char*)&length, sizeof(length));
-    fout.write(play.name, length + 1);
-    fout.write((char*)&play.numberSeat, sizeof(play.numberSeat));
-    fout.write((char*)&play.numberRow, sizeof(play.numberRow));
-    fout.write((char*)&play.occupiedSeats, sizeof(play.occupiedSeats));
-    if (play.occupiedRows != nullptr) {
-        for (int i = 0; i < play.numberRow; i++) {
-            fout.write((char*)&play.occupiedRows[i], sizeof(play.occupiedRows[i]));
-        }
-    }
+    
+    fout << play.name << endl;
+    fout << play.numberSeat << endl;
+
     return fout;
 }
 
-ifstream& operator>>(std::ifstream& fin, Theater& play) {
-    unsigned length = 0;
-    fin.read((char*)&length, sizeof(length));
-    char* n = new char[length + 1];
-    fin.read(n, length + 1);
-    play.name = n;
-    delete[] n;
-    fin.read((char*)&play.numberSeat, sizeof(play.numberSeat));
-    fin.read((char*)&play.numberRow, sizeof(play.numberRow));
-    fin.read((char*)&play.occupiedSeats, sizeof(play.occupiedSeats));
-    if (play.occupiedRows != nullptr) {
-        for (int i = 0; i < play.numberRow; i++) {
-            fin.read((char*)&play.occupiedRows[i], sizeof(play.occupiedRows[i]));
-        }
-    }
+ifstream& operator>>(ifstream& fin, Theater& play) {
+    
+    fin >> play.numberSeat;
+    getline(fin, play.name); 
     return fin;
+    
 }
 
 
@@ -494,7 +412,7 @@ public:
 
     }
 
-    Cinema(const char* name, int occupiedSeats, int numberRow, int* occupiedRows, const string* movies, int numMovies)
+    Cinema(string name, int occupiedSeats, int numberRow, int* occupiedRows, string* movies, int numMovies)
         : Theater(name, occupiedSeats, numberRow, occupiedRows) {
 
         if (movies != nullptr)
@@ -558,6 +476,20 @@ public:
     }
 
 
+    int getNumMovies() {
+        return this->numMovies;
+    }
+
+    void setNumMovies(int numMovies) {
+        this->numMovies = numMovies;
+    }
+
+
+    void showMovie() {
+        Theater::showAvailability();
+        cout << "The movie is " << this->movies;
+    }
+
     friend ostream& operator<<(ostream&, Cinema);
     friend istream& operator>>(istream&, Cinema&);
     
@@ -581,7 +513,7 @@ istream& operator>>(istream& console, Cinema& c)
 {
     cout << "Number of movies: ";
      
-        console >> c.numMovies;
+   console >> c.numMovies;
     
 
     return console;
