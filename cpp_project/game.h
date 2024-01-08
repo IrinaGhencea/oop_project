@@ -14,7 +14,7 @@ private:
     string teams;
     string seat;
     string row;
-    int age; //statically defined array
+    int age; 
     int duration; 
     
 
@@ -337,6 +337,10 @@ public:
        
     }
 
+    virtual void showGameType() {
+        cout << "This is a football game." << "\n";
+    }
+
    
     friend istream& operator>>(istream& console, Game&);
     friend ostream& operator<<(ostream& console, const Game );
@@ -350,10 +354,19 @@ public:
 
 };
 
-
 // initializing static variables
 int Game::extra = 15;
 
+
+
+class FootballGame : public Game {
+
+public:
+    void showGameType() {
+        cout << "American football or European football" << "\n";
+
+    }
+};
 
 //<<operator
  ostream& operator<<(ostream& console, const Game game) {
@@ -363,7 +376,7 @@ int Game::extra = 15;
 
         console << "Game's name is : " << game.name << '\n';
     }
-    console << "Your age :"<<game.age<<'\n';
+   
     console << "Your seat is : " << game.seat << '\n';
    
 
@@ -382,8 +395,6 @@ istream& operator>>(istream& console, Game& game) {
     game.setName(buffer);
 
 
-    cout << "Your age: "<<'\n';
-    console >> game.age;
 
 
     cout << "Your seat is: " << '\n';
@@ -412,3 +423,4 @@ ofstream& operator<<(ofstream& fout, const Game& g) {
      return fin;
 }
 
+ 

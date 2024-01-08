@@ -24,19 +24,19 @@ int main() {
 
     Ticket t3 = ticket1--;
 
-    cout << t3.getPrice();
+   /* cout << t3.getPrice();*/
 
     Ticket t4 = --ticket1;
 
-    cout << t4.getPrice();
+   /* cout << t4.getPrice();*/
 
     cout << t3[1];
 
-    if (ticket1 == t3) {
-        cout << "are equal.";
+    if (t2== t3) {
+        cout << "The prices are equal.";
     }
     else {
-        cout << " are not equal.";
+        cout << " The prices are not equal.";
     }
 
     ticket1.priceWithDiscount(5);
@@ -68,6 +68,8 @@ int main() {
     cout << ticket1 << endl;
     cout << t2 << endl;
 
+   
+
 
 
     //game
@@ -95,8 +97,8 @@ int main() {
 
     Game g5 = g1;
 
-    /*Game g4 = g2 + 20;
-    cout << g4.getDuration();*/
+   /* Game g4 = g2 + 20;
+    cout << "Duration :"<<g4.getDuration();*/
 
     
    
@@ -115,6 +117,11 @@ int main() {
     ifstream f2("Game.txt");
     f2 >> g5;
 
+
+    Game football;
+    football.showGameType();
+    FootballGame typeFootball;
+    typeFootball.showGameType();
   
     //theater
     
@@ -150,8 +157,8 @@ int main() {
 
     string movies[]{ "Spiderman1", "Iron Man", "Thor" };
 
-    Cinema c("Cinema City ", 67, 3, i, movies, 3);
-    c.showMovie();
+    Cinema c("Marvel", 67, 3, i, movies, 3);
+
 
 
 

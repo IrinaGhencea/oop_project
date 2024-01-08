@@ -13,7 +13,7 @@ private:
 	int maximumNumber;
 	string id; 
 	string personName;
-	int age; //statically defined array of numbers
+	int age; 
     const string company;
 	
 
@@ -440,7 +440,7 @@ ifstream& operator>>(ifstream& fin, Ticket& ticket) {
 
  class EventInformation {
  public:
-	 virtual void showEventCategory() const = 0;
+	 virtual void showEventCategory() = 0;
 
 	 virtual ~EventInformation() {}
  };
@@ -448,7 +448,7 @@ ifstream& operator>>(ifstream& fin, Ticket& ticket) {
  class ArtisticEventInformation : public EventInformation {
  public:
 	
-	 void showEventCategory() const override {
+	 void showEventCategory() {
 		 cout << "You can buy a ticket for a concert or a movie here." << "\n";
 	 }
  };
@@ -457,7 +457,7 @@ ifstream& operator>>(ifstream& fin, Ticket& ticket) {
  class SportsEventInformation : public EventInformation {
  public:
 	
-	 void showEventCategory() const override {
+	 void showEventCategory() {
 		 cout << "You can buy a ticket for a sports event here." << "\n";
 	 }
  };

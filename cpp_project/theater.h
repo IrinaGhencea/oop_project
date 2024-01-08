@@ -8,7 +8,7 @@ using namespace std;
 class Theater {
 private:
     string name; 
-    int numberSeat; //statically defined array of numbers
+    int numberSeat; 
     int numberRow;
     int occupiedSeats;
     int* occupiedRows; //dynamically defined array of numbers
@@ -201,7 +201,7 @@ public:
 
 
 
-            cout << "PLay/Movie's name is " << this->name<<'\n';
+            cout << "PLay's name is " << this->name<<'\n';
 
         
         
@@ -214,7 +214,7 @@ public:
 
        
 
-        cout << "For the play/movie " << this->name<<"\n";
+        cout << "For the play " << this->name<<"\n";
 
         
         cout << " The number of seats that have already been occupied is " << this->occupiedSeats << "\n";
@@ -357,7 +357,7 @@ int Theater::max_number_seats = 350;
 
   
 
-    console << "The play/movies is " << play.name << '\n';
+    console << "Movie's name is " << play.name << '\n';
     
     console << "The number of seats that have been occupied is: " << play.numberSeat << '\n';
 
@@ -367,7 +367,7 @@ int Theater::max_number_seats = 350;
 
 //>> operator
 istream& operator>>(istream& console, Theater& play) {
-    cout << endl << "Play/Movies's name is: " << "\n";
+    cout << endl << "Movies's name is: " << "\n";
     console >> play.name;
 
     cout << "The number of occupied seats: " << '\n';
@@ -485,10 +485,6 @@ public:
     }
 
 
-    void showMovie() {
-        Theater::showAvailability();
-        cout << "The movie is " << this->movies;
-    }
 
     friend ostream& operator<<(ostream&, Cinema);
     friend istream& operator>>(istream&, Cinema&);
@@ -503,7 +499,7 @@ ostream& operator<<(ostream& console, Cinema c)
     
     console << (Theater)c << '\n';
 
-    console <<"Number of movies: " << c.numMovies;
+    console << "Number of movies: " << c.numMovies << endl;
 
     return console;
 }
@@ -511,7 +507,9 @@ ostream& operator<<(ostream& console, Cinema c)
 
 istream& operator>>(istream& console, Cinema& c)
 {
-    cout << "Number of movies: ";
+
+    console >> (Theater&)c;
+    cout << "Number of movies: "<<endl;
      
    console >> c.numMovies;
     
