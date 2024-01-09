@@ -22,7 +22,6 @@ private:
     static int extra;
 
     
-  
 
 public:
 
@@ -237,7 +236,7 @@ public:
         {
 
 
-            cout << "Game's name is " << this->name<<"and the minimum age is "<<this->minAge<<"\n";
+            cout << "Game's name is " << this->name<<" and the minimum age is "<<this->minAge<<"\n";
 
         }
         cout << "Your seat is " << this->seat << " and your row is " << this->row<<"\n";
@@ -250,7 +249,7 @@ public:
         {
 
 
-            cout << "For this " << this->name << " the duration is " << this->duration << "\n"; 
+            cout << "For this " << this->name << " the duration is :" << this->duration << "\n"; 
             
 
         }
@@ -310,7 +309,7 @@ public:
         else return false;
     }
 
-
+    //binary files
     void saveInBfileg() {
         ofstream f("Game.bin", ios::out | ios::binary);
 
@@ -337,8 +336,10 @@ public:
        
     }
 
+    //virtual method 
+
     virtual void showGameType() {
-        cout << "This is a football game." << "\n";
+        cout << " This is a football game. " << "\n";
     }
 
    
@@ -363,7 +364,7 @@ class FootballGame : public Game {
 
 public:
     void showGameType() {
-        cout << "American football or European football" << "\n";
+        cout << " American football or European football " << "\n";
 
     }
 };
@@ -374,10 +375,10 @@ public:
 
     if (game.name != nullptr) {
 
-        console << "Game's name is : " << game.name << '\n';
+        console << " Game's name is : " << game.name << '\n';
     }
    
-    console << "Your seat is : " << game.seat << '\n';
+    console << " Your seat is : " << game.seat << '\n';
    
 
 
@@ -387,7 +388,7 @@ public:
 
 //>> operator
 istream& operator>>(istream& console, Game& game) {
-    cout << "Game's name is :" << '\n';
+    cout << " Game's name is :" << '\n';
     char buffer[100];
     console.getline(buffer, 100);
     console.clear();
@@ -397,7 +398,7 @@ istream& operator>>(istream& console, Game& game) {
 
 
 
-    cout << "Your seat is: " << '\n';
+    cout << " Your seat is: " << '\n';
     console >> game.seat;
 
    
@@ -407,6 +408,8 @@ istream& operator>>(istream& console, Game& game) {
 
 
 }
+
+//files
 
 ofstream& operator<<(ofstream& fout, const Game& g) {
     fout << g.teams << endl;

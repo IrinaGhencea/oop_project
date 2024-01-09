@@ -19,8 +19,6 @@ private:
 
 public:
 
-
-
     // default constructor
     Theater() {
         this->numberSeat = 0;
@@ -214,10 +212,10 @@ public:
 
        
 
-        cout << "For the play " << this->name<<"\n";
+        cout << " For the play " << this->name<<"\n";
 
         
-        cout << " The number of seats that have already been occupied is " << this->occupiedSeats << "\n";
+        cout << " The number of seats that have already been occupied is :" << this->occupiedSeats << "\n";
 
       
 
@@ -301,6 +299,7 @@ public:
         else return false;
     }
 
+    //binary files
 
     void saveInBfileth() {
 
@@ -355,7 +354,7 @@ int Theater::max_number_seats = 350;
  ostream& operator<<(ostream& console, const Theater play) {
 
 
-  
+     console << "Choose a movie between Spiderman, Iron Man and Thor: " << endl;
 
     console << "Movie's name is " << play.name << '\n';
     
@@ -367,6 +366,7 @@ int Theater::max_number_seats = 350;
 
 //>> operator
 istream& operator>>(istream& console, Theater& play) {
+    cout<< "Choose a movie between Spiderman, Iron Man and Thor: " << endl;
     cout << endl << "Movies's name is: " << "\n";
     console >> play.name;
 
@@ -400,6 +400,7 @@ ifstream& operator>>(ifstream& fin, Theater& play) {
 
 class Cinema : public Theater {
 private:
+
     string* movies; 
     int numMovies;
 
@@ -490,8 +491,6 @@ public:
     friend istream& operator>>(istream&, Cinema&);
     
 };
-
-
 
 
 ostream& operator<<(ostream& console, Cinema c)

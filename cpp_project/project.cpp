@@ -16,7 +16,7 @@ int main() {
 
     int price1[]{ 15, 20, 30 };
 
-    Ticket ticket1(price1, "name", "iaBilet", 5, 3, id);
+    Ticket ticket1(price1, "your name", "iaBilet", 14, 3, id);
 
     ticket1.showPrice();
 
@@ -24,19 +24,18 @@ int main() {
 
     Ticket t3 = ticket1--;
 
-   /* cout << t3.getPrice();*/
 
     Ticket t4 = --ticket1;
 
-   /* cout << t4.getPrice();*/
+  
 
     cout << t3[1];
 
     if (t2== t3) {
-        cout << "The prices are equal.";
+        cout << "The prices are the same."<<endl;
     }
     else {
-        cout << " The prices are not equal.";
+        cout << " The prices are not the same."<<endl;
     }
 
     ticket1.priceWithDiscount(5);
@@ -68,15 +67,12 @@ int main() {
     cout << ticket1 << endl;
     cout << t2 << endl;
 
-   
-
-
 
     //game
 
    
-    char name[] = "game1";
-    Game g1(name, "Arena Nationala", "24", "30", "Steaua-Dinamo", 15);
+    char name[] = "football game";
+    Game g1(name, "Arena Nationala", "24A", "30", "Steaua-Dinamo", 15);
 
     g1.showDetailsGame();
 
@@ -123,6 +119,8 @@ int main() {
     FootballGame typeFootball;
     typeFootball.showGameType();
   
+
+
     //theater
     
 
@@ -130,9 +128,9 @@ int main() {
 
     th.showCapacity();
 
-    int i[]{ 100, 200, 300 };
+    int i[]{ 50, 100, 150 };
 
-    Theater th2("Pistruiatul", 20, 3, i);
+    Theater th2("The phantom of the opera", 20, 3, i);
 
     th2.showAvailability();
 
@@ -143,19 +141,19 @@ int main() {
     Theater th5 = ++th3;
 
     if (th5 == th4) {
-        cout << "are equal";
+        cout << "The prices are equal"<<endl;
     }
     else {
-        cout << "not equal";
+        cout << "The prices are not equal"<<endl;
     }
 
-    cout << th5[2];
+    cout << th5[2]<<endl;
     Theater th6 = th4 + th5;
     
     Theater t;
 
 
-    string movies[]{ "Spiderman1", "Iron Man", "Thor" };
+    string movies[]{ "Spiderman", "Iron Man", "Thor" };
 
     Cinema c("Marvel", 67, 3, i, movies, 3);
 

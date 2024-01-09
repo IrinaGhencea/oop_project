@@ -6,7 +6,6 @@
 using namespace std;
 
 
-
 class Ticket {
 private:
 	int* price; //dynamically defined array of numbers
@@ -272,7 +271,6 @@ public:
 
 
 
-
 	//a method that prints the price of the ticket
 	void showPrice()
 	{
@@ -281,7 +279,7 @@ public:
 		
 			
 			
-	    cout << "Your id is " << this->id<<" associated with the name "<<this->personName<<"\n";
+	    cout << "Your id is " << this->id<<" associated with  "<<this->personName<<"\n";
 			
 		
 		if (this->price != nullptr)
@@ -341,6 +339,7 @@ public:
 			return false;
 	}
 
+	//binary files
 
 	void saveInBfile() {
 		ofstream f("Ticket.bin", ios::out | ios::binary);
@@ -396,25 +395,25 @@ int Ticket::discount = 5;
 ostream& operator<<(ostream& console, const Ticket ticket)
 {
 	console << " Person name:" << ticket.personName << "\n";
-	console << "Id: " << ticket.id << '\n';
-	console << "Age:" << ticket.age << '\n';
+	console << " Id: " << ticket.id << '\n';
+	console << " Minimum age:" << ticket.age << '\n';
 
 	return console;
 }
 
 // >> operator 
 istream& operator>>(istream& console, Ticket& ticket) {
-	cout << "Person name:" << '\n';
+	cout << " Person name:" << '\n';
 	console >> ticket.personName;
 
 
-	cout << "ticket ID: " << '\n';
+	cout << " ticket ID: " << '\n';
 
 	char buffer[100];
 	console.getline(buffer, 100);
 	console.clear();
 	ticket.setId(buffer);
-	cout << "age: " << ticket.age << '\n';
+	cout << "Minimum age: " << ticket.age << '\n';
 
 
 
@@ -438,6 +437,8 @@ ifstream& operator>>(ifstream& fin, Ticket& ticket) {
 }
 
 
+//virtual method
+
  class EventInformation {
  public:
 	 virtual void showEventCategory() = 0;
@@ -449,7 +450,7 @@ ifstream& operator>>(ifstream& fin, Ticket& ticket) {
  public:
 	
 	 void showEventCategory() {
-		 cout << "You can buy a ticket for a concert or a movie here." << "\n";
+		 cout << " You can buy a ticket for a concert or a movie here. " << "\n";
 	 }
  };
 
@@ -458,6 +459,6 @@ ifstream& operator>>(ifstream& fin, Ticket& ticket) {
  public:
 	
 	 void showEventCategory() {
-		 cout << "You can buy a ticket for a sports event here." << "\n";
+		 cout << " You can buy a ticket for a sports event here. " << "\n";
 	 }
  };
